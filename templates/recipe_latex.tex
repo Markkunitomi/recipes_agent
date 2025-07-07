@@ -1,0 +1,31 @@
+% Recipe: {{ recipe.title }}
+% Generated on {{ generated_date }}
+
+\begin{recipe}
+    [{{ escaped_title }}]
+    [{{ servings_display }}]
+    [{{ time_display }}]
+
+{% if recipe.description %}
+{{ escaped_description }}
+
+{% endif %}
+\begin{ingredients}
+{% for ingredient in escaped_ingredients %}
+    \ingredient{ {{ ingredient }} }
+{% endfor %}
+\end{ingredients}
+
+\begin{steps}
+{% for instruction in escaped_instructions %}
+    \step {{ instruction }}
+{% endfor %}
+\end{steps}
+
+{% if recipe.tags %}
+\begin{center}
+\textit{Tags: {{ recipe.tags | join(', ') }}}
+\end{center}
+{% endif %}
+
+\end{recipe}

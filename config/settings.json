@@ -1,0 +1,46 @@
+{
+  "app_name": "Recipe Agent System",
+  "version": "1.0.0",
+  "debug": false,
+  "log_level": "INFO",
+  "llm": {
+    "anthropic_model": "claude-3-haiku-20240307",
+    "openai_model": "gpt-3.5-turbo",
+    "ollama_host": "http://localhost:11434",
+    "ollama_model": "llama3.1:8b",
+    "default_provider": "anthropic",
+    "temperature": 0.7,
+    "max_tokens": 1000,
+    "timeout": 30
+  },
+  "scraping": {
+    "user_agent": "RecipeAgent/1.0 (Educational Use)",
+    "timeout": 10,
+    "max_retries": 3,
+    "retry_delay": 1.0,
+    "max_content_length": 10485760
+  },
+  "processing": {
+    "min_ingredient_confidence": 0.7,
+    "enable_ingredient_normalization": true,
+    "enable_instruction_enhancement": true,
+    "preferred_volume_unit": "cup",
+    "preferred_weight_unit": "g",
+    "preferred_temperature_unit": "F",
+    "min_recipe_quality_score": 0.6,
+    "require_ingredients": true,
+    "require_instructions": true
+  },
+  "output": {
+    "output_dir": "./output",
+    "templates_dir": "./templates",
+    "html_template": "strangetom_style.html",
+    "include_nutrition": true,
+    "include_metadata": true,
+    "latex_template": "cookbook_style.tex",
+    "latex_compiler": "xelatex",
+    "download_images": true,
+    "image_quality": 80,
+    "max_image_size": 800
+  }
+}

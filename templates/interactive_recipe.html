@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --dark-color: #343a40;
+            --light-color: #f8f9fa;
+            --border-color: #e9ecef;
+            --text-color: #495057;
+            --text-muted: #6c757d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--light-color);
+        }
+
+        .recipe-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .recipe-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+        }
+
+        .recipe-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .recipe-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .recipe-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem 2rem;
+            background: var(--light-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .meta-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .recipe-content {
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        /* Interactive Controls */
+        .controls-group {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .control-set {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-label {
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-right: 0.5rem;
+        }
+
+        .radio-group {
+            display: flex;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .radio-option {
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .radio-option label {
+            display: block;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .radio-option:last-child label {
+            border-right: none;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .radio-option label:hover {
+            background: var(--light-color);
+        }
+
+        /* Ingredients List */
+        .ingredients-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ingredient-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--light-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .ingredient-item:last-child {
+            border-bottom: none;
+        }
+
+        .ingredient-quantity {
+            font-weight: 600;
+            color: var(--primary-color);
+            min-width: 80px;
+            margin-right: 1rem;
+        }
+
+        .ingredient-name {
+            flex: 1;
+        }
+
+        .ingredient-preparation {
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        /* Instructions List */
+        .instructions-list {
+            counter-reset: step-counter;
+        }
+
+        .instruction-step {
+            counter-increment: step-counter;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--light-color);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            position: relative;
+        }
+
+        .instruction-checkbox {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 20px;
+            height: 20px;
+            accent-color: var(--success-color);
+        }
+
+        .instruction-step::before {
+            content: counter(step-counter);
+            background: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 1rem;
+            float: left;
+        }
+
+        .instruction-text {
+            margin-left: 46px;
+        }
+
+        .instruction-step.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        /* Timer Button */
+        .timer-button {
+            background: var(--warning-color);
+            color: var(--dark-color);
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 0 0.25rem;
+        }
+
+        .timer-button:hover {
+            background: #e0a800;
+            transform: translateY(-1px);
+        }
+
+        .timer-button:active {
+            transform: translateY(0);
+        }
+
+        /* Tooltip for ingredients in instructions */
+        .ingredient-tooltip {
+            cursor: help;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .ingredient-tooltip:hover::after {
+            content: attr(data-amount) " " attr(data-unit);
+            position: absolute;
+            background: var(--dark-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+            z-index: 1000;
+        }
+
+        /* Tags */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: var(--border-color);
+            color: var(--text-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        /* Timer Display */
+        .timer-display {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--dark-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: none;
+            min-width: 200px;
+        }
+
+        .timer-display.active {
+            display: block;
+        }
+
+        .timer-time {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .timer-label {
+            text-align: center;
+            font-size: 0.875rem;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .timer-controls button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .controls-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .recipe-title {
+                font-size: 2rem;
+            }
+            
+            .timer-display {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="recipe-card">
+        <div class="recipe-header">
+            <h1 class="recipe-title">{{ title }}</h1>
+            {% if description %}
+            <p class="recipe-description">{{ description }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="recipe-meta">
+            {% if servings %}
+            <div class="meta-item">
+                <div class="meta-label">Servings</div>
+                <div class="meta-value" id="servings-display">{{ servings }}</div>
+            </div>
+            {% endif %}
+            {% if prep_time %}
+            <div class="meta-item">
+                <div class="meta-label">Prep Time</div>
+                <div class="meta-value">{{ prep_time }} min</div>
+            </div>
+            {% endif %}
+            {% if cook_time %}
+            <div class="meta-item">
+                <div class="meta-label">Cook Time</div>
+                <div class="meta-value">{{ cook_time }} min</div>
+            </div>
+            {% endif %}
+            {% if total_time %}
+            <div class="meta-item">
+                <div class="meta-label">Total Time</div>
+                <div class="meta-value">{{ total_time }} min</div>
+            </div>
+            {% endif %}
+            {% if difficulty %}
+            <div class="meta-item">
+                <div class="meta-label">Difficulty</div>
+                <div class="meta-value">{{ difficulty }}</div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="recipe-content">
+            <div class="section">
+                <h2 class="section-title">Ingredients</h2>
+                
+                <!-- Interactive Controls -->
+                <div class="controls-group">
+                    <div class="control-set">
+                        <span class="control-label">Units:</span>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" name="units" value="metric" id="metric" checked>
+                                <label for="metric">Metric</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" name="units" value="imperial" id="imperial">
+                                <label for="imperial">Imperial</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-set">
+                        <span class="control-label">Scale:</span>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" name="scale" value="0.5" id="scale-half">
+                                <label for="scale-half">×0.5</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" name="scale" value="1" id="scale-one" checked>
+                                <label for="scale-one">×1</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" name="scale" value="2" id="scale-two">
+                                <label for="scale-two">×2</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" name="scale" value="3" id="scale-three">
+                                <label for="scale-three">×3</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <ul class="ingredients-list">
+                    {% for ingredient in ingredients %}
+                    <li class="ingredient-item" data-ingredient="{{ loop.index0 }}">
+                        <span class="ingredient-quantity" 
+                              data-original="{{ ingredient.quantity or '' }}"
+                              data-unit="{{ ingredient.unit or '' }}"
+                              data-metric-qty="{{ ingredient.metric_quantity or ingredient.quantity or '' }}"
+                              data-metric-unit="{{ ingredient.metric_unit or ingredient.unit or '' }}"
+                              data-imperial-qty="{{ ingredient.imperial_quantity or '' }}"
+                              data-imperial-unit="{{ ingredient.imperial_unit or '' }}">
+                            {% if ingredient.quantity %}{{ ingredient.quantity }}{% endif %}
+                            {% if ingredient.unit %} {{ ingredient.unit }}{% endif %}
+                        </span>
+                        <span class="ingredient-name">
+                            {{ ingredient.name }}{% if ingredient.preparation %}, <span class="ingredient-preparation">{{ ingredient.preparation }}</span>{% endif %}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">Instructions</h2>
+                <div class="instructions-list">
+                    {% for instruction in instructions %}
+                    <div class="instruction-step" data-step="{{ loop.index }}">
+                        <input type="checkbox" class="instruction-checkbox" id="step-{{ loop.index }}">
+                        <div class="instruction-text">
+                            {{ instruction | safe }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            {% if tags %}
+            <div class="section">
+                <h2 class="section-title">Tags</h2>
+                <div class="tags">
+                    {% for tag in tags %}
+                    <span class="tag">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="footer">
+            Generated on {{ generation_date }}
+            {% if source_url %} | Source: {{ source_url }}{% endif %}
+        </div>
+    </div>
+
+    <!-- Timer Display -->
+    <div class="timer-display" id="timer-display">
+        <div class="timer-time" id="timer-time">00:00</div>
+        <div class="timer-label" id="timer-label">Timer</div>
+        <div class="timer-controls">
+            <button onclick="pauseTimer()">Pause</button>
+            <button onclick="resetTimer()">Reset</button>
+            <button onclick="stopTimer()">Stop</button>
+        </div>
+    </div>
+
+    <script>
+        // Recipe scaling and unit conversion
+        class RecipeCalculator {
+            constructor() {
+                this.originalData = this.extractOriginalData();
+                this.setupEventListeners();
+            }
+
+            extractOriginalData() {
+                const ingredients = [];
+                document.querySelectorAll('[data-ingredient]').forEach(item => {
+                    const qtyElement = item.querySelector('.ingredient-quantity');
+                    ingredients.push({
+                        element: qtyElement,
+                        original: parseFloat(qtyElement.dataset.original) || 0,
+                        unit: qtyElement.dataset.unit || '',
+                        metricQty: parseFloat(qtyElement.dataset.metricQty) || 0,
+                        metricUnit: qtyElement.dataset.metricUnit || '',
+                        imperialQty: parseFloat(qtyElement.dataset.imperialQty) || 0,
+                        imperialUnit: qtyElement.dataset.imperialUnit || ''
+                    });
+                });
+                return ingredients;
+            }
+
+            setupEventListeners() {
+                // Unit conversion
+                document.querySelectorAll('input[name="units"]').forEach(radio => {
+                    radio.addEventListener('change', () => this.updateUnits());
+                });
+
+                // Scaling
+                document.querySelectorAll('input[name="scale"]').forEach(radio => {
+                    radio.addEventListener('change', () => this.updateScale());
+                });
+
+                // Instruction checkboxes
+                document.querySelectorAll('.instruction-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', (e) => {
+                        const step = e.target.closest('.instruction-step');
+                        step.classList.toggle('completed', e.target.checked);
+                    });
+                });
+            }
+
+            updateUnits() {
+                const units = document.querySelector('input[name="units"]:checked').value;
+                const scale = parseFloat(document.querySelector('input[name="scale"]:checked').value);
+
+                this.originalData.forEach(ingredient => {
+                    if (ingredient.original > 0) {
+                        let quantity, unit;
+                        
+                        if (units === 'imperial' && ingredient.imperialQty > 0) {
+                            quantity = ingredient.imperialQty * scale;
+                            unit = ingredient.imperialUnit;
+                        } else if (units === 'metric' && ingredient.metricQty > 0) {
+                            quantity = ingredient.metricQty * scale;
+                            unit = ingredient.metricUnit;
+                        } else {
+                            quantity = ingredient.original * scale;
+                            unit = ingredient.unit;
+                        }
+
+                        // Format quantity nicely
+                        const formattedQty = this.formatQuantity(quantity);
+                        ingredient.element.textContent = formattedQty + (unit ? ' ' + unit : '');
+                    }
+                });
+            }
+
+            updateScale() {
+                this.updateUnits(); // Reuse the same logic
+                
+                // Update servings display
+                const scale = parseFloat(document.querySelector('input[name="scale"]:checked').value);
+                const servingsDisplay = document.getElementById('servings-display');
+                if (servingsDisplay) {
+                    const originalServings = parseInt(servingsDisplay.textContent);
+                    const newServings = Math.round(originalServings * scale);
+                    servingsDisplay.textContent = newServings;
+                }
+            }
+
+            formatQuantity(quantity) {
+                if (quantity < 0.1) return quantity.toFixed(3);
+                if (quantity < 1) return this.toFraction(quantity);
+                if (quantity === Math.floor(quantity)) return quantity.toString();
+                
+                const whole = Math.floor(quantity);
+                const fraction = quantity - whole;
+                if (fraction < 0.1) return whole.toString();
+                
+                const fractionStr = this.toFraction(fraction);
+                return whole > 0 ? `${whole} ${fractionStr}` : fractionStr;
+            }
+
+            toFraction(decimal) {
+                const fractions = [
+                    [0.125, '⅛'], [0.25, '¼'], [0.333, '⅓'], [0.375, '⅜'],
+                    [0.5, '½'], [0.625, '⅝'], [0.667, '⅔'], [0.75, '¾'], [0.875, '⅞']
+                ];
+                
+                for (let [value, symbol] of fractions) {
+                    if (Math.abs(decimal - value) < 0.05) return symbol;
+                }
+                
+                return decimal.toFixed(2);
+            }
+        }
+
+        // Timer functionality
+        class RecipeTimer {
+            constructor() {
+                this.timers = new Map();
+                this.activeTimer = null;
+                this.setupTimerButtons();
+            }
+
+            setupTimerButtons() {
+                document.querySelectorAll('.timer-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const minutes = parseInt(e.target.dataset.minutes);
+                        const label = e.target.dataset.label || 'Timer';
+                        this.startTimer(minutes * 60, label);
+                    });
+                });
+            }
+
+            startTimer(seconds, label) {
+                if (this.activeTimer) {
+                    clearInterval(this.activeTimer);
+                }
+
+                let remaining = seconds;
+                const display = document.getElementById('timer-display');
+                const timeElement = document.getElementById('timer-time');
+                const labelElement = document.getElementById('timer-label');
+
+                labelElement.textContent = label;
+                display.classList.add('active');
+
+                this.activeTimer = setInterval(() => {
+                    const minutes = Math.floor(remaining / 60);
+                    const secs = remaining % 60;
+                    timeElement.textContent = `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+                    if (remaining <= 0) {
+                        this.timerComplete(label);
+                        return;
+                    }
+                    remaining--;
+                }, 1000);
+            }
+
+            timerComplete(label) {
+                clearInterval(this.activeTimer);
+                this.activeTimer = null;
+                
+                // Flash the timer and play notification
+                const display = document.getElementById('timer-display');
+                display.style.animation = 'pulse 1s infinite';
+                
+                // Browser notification if permission granted
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification(`Timer Complete: ${label}`);
+                }
+                
+                alert(`Timer complete: ${label}`);
+                this.stopTimer();
+            }
+
+            pauseTimer() {
+                if (this.activeTimer) {
+                    clearInterval(this.activeTimer);
+                    this.activeTimer = null;
+                }
+            }
+
+            resetTimer() {
+                // Would need to store original time to implement properly
+                this.stopTimer();
+            }
+
+            stopTimer() {
+                if (this.activeTimer) {
+                    clearInterval(this.activeTimer);
+                    this.activeTimer = null;
+                }
+                document.getElementById('timer-display').classList.remove('active');
+            }
+        }
+
+        // Global timer functions for buttons
+        let recipeTimer;
+        
+        function pauseTimer() {
+            recipeTimer.pauseTimer();
+        }
+        
+        function resetTimer() {
+            recipeTimer.resetTimer();
+        }
+        
+        function stopTimer() {
+            recipeTimer.stopTimer();
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const calculator = new RecipeCalculator();
+            recipeTimer = new RecipeTimer();
+            
+            // Request notification permission
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        });
+    </script>
+</body>
+</html>

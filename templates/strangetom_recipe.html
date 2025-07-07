@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="Description" content="{{ recipe.title }}"/>
+        <meta name="viewport" content="width=device-width"/>
+        <meta name="theme-color" content="#292d33"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:title" content="{{ recipe.title }} | Recipe"/>
+        <meta property="og:description" content="{{ recipe.description or recipe.title }}"/>
+        {% if recipe.image_url %}
+        <meta property="og:image" content="{{ recipe.image_url }}"/>
+        {% endif %}
+        <meta property="og:site_name" content="Recipe Collection"/>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:title" content="{{ recipe.title }} | Recipe"/>
+        <meta name="twitter:description" content="{{ recipe.description or recipe.title }}"/>
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'sha256-/bXh1pan0r20HBZrnPN+vDirN0r5YwePxsSH+3nm3oo='; script-src 'self';"/>
+        <title>{{ recipe.title }} | Recipe</title>
+        <link rel="preload" href="fonts/quattrocento-latin.woff2" as="font" type="font/woff2" crossorigin/>
+        <link rel="preload" href="fonts/quattrocento-latin-ext.woff2" as="font" type="font/woff2" crossorigin/>
+        <link rel="preload" href="css/colours.min.css" as="style"/>
+        <link rel="stylesheet" type="text/css" href="css/recipe.min.css"/>
+        <link rel="icon" href="favicon.svg" type="image/svg+xml"/>
+        <script defer src="js/menu.min.js"></script>
+        <script src="js/scale_timers.min.js"></script>
+        <noscript><style type="text/css">.scale-controls,.unit-controls,.temp-controls,.inline-amount-controls,.toast-btn{display: none;}</style></noscript>
+    </head>
+    <body itemscope itemtype="https://schema.org/Recipe">
+        <main>            
+            <header>
+                <a href="/">Recipe&nbsp;Collection</a>
+                <button type="button" id="sidebar" aria-label="Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                </button>
+            </header>
+
+            <meta itemprop="datePublished" content="{% if recipe.date_scraped %}{{ recipe.date_scraped.strftime('%Y-%m-%d') }}{% else %}{{ generated_date }}{% endif %}"/>
+            {% if recipe.total_time %}
+            <meta itemprop="totalTime" content="PT{{ recipe.total_time }}M"/>
+            {% endif %}
+            {% if recipe.prep_time %}
+            <meta itemprop="prepTime" content="PT{{ recipe.prep_time }}M"/>
+            {% endif %}
+            {% if recipe.cook_time %}
+            <meta itemprop="performTime" content="PT{{ recipe.cook_time }}M"/>
+            {% endif %}
+            {% if recipe.servings %}
+            <meta itemprop="recipeYield" content="{{ recipe.servings }} servings"/>
+            {% endif %}
+            
+            {% if recipe.image_url %}
+            <img itemprop="image" class="recipe-image" src="{{ recipe.image_url }}" alt="Photograph of {{ recipe.title }}." width="512" height="288"/>
+            {% endif %}
+            
+            <div class="recipe-icons">
+                <div></div>
+                <div>
+                    <span class="recipe-icon hidden" id="wakelock">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                          <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                          <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                        </svg>
+                    </span>
+                    <span class="recipe-icon hidden", id="share">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5"/>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+
+            <section class="recipe">
+                <h1><span itemprop="name">{{ recipe.title }}</span></h1>
+
+                <div class="recipe-metadata">
+                    {% if recipe.servings %}
+                    <span id="serves">Serves <span id="servings" data-default="{{ recipe.servings }}">{{ recipe.servings }}</span></span>
+                    {% endif %}
+                    {% if recipe.prep_time %}
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span>Prep {{ prep_time_formatted }}</span>
+                    {% endif %}
+                    {% if recipe.cook_time %}
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span>Cook {{ cook_time_formatted }}</span>
+                    {% endif %}
+                </div>
+                
+                <hr/>
+                
+                {% if recipe.description %}
+                <div class="description">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="quote" viewBox="0 0 16 16">
+                        <path d="M12 12a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1h-1.388q0-.527.062-1.054.093-.558.31-.992t.559-.683q.34-.279.868-.279V3q-.868 0-1.52.372a3.3 3.3 0 0 0-1.085.992 4.9 4.9 0 0 0-.62 1.458A7.7 7.7 0 0 0 9 7.558V11a1 1 0 0 0 1 1zm-6 0a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1H4.612q0-.527.062-1.054.094-.558.31-.992.217-.434.559-.683.34-.279.868-.279V3q-.868 0-1.52.372a3.3 3.3 0 0 0-1.085.992 4.9 4.9 0 0 0-.62 1.458A7.7 7.7 0 0 0 3 7.558V11a1 1 0 0 0 1 1z"/>
+                    </svg>
+                    <p itemprop="description">{{ recipe.description }}</p>
+                </div>
+                {% endif %}
+                
+                
+                <hr/>
+                <h2>Ingredients</h2>
+                
+                <div class="unit-controls">
+                    <div class="cntrl">
+                        <input type="radio" name="units" value="metric" id="metric" checked/>
+                        <label for="metric">Metric</label>
+                    </div>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <div class="cntrl">
+                        <input type="radio" name="units" value="imperial" id="imperial" />
+                        <label for="imperial">Imperial</label>
+                    </div>
+                </div>
+
+                <div class="scale-controls">
+                    <div class="cntrl">
+                        <input type="radio" name="scale" value="x0.5" id="x0.5"/>
+                        <label for="x0.5">x0.5</label>
+                    </div>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <div class="cntrl">
+                        <input type="radio" name="scale" value="x1" id="x1" checked/>
+                        <label for="x1">x1</label>
+                    </div>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <div class="cntrl">
+                        <input type="radio" name="scale" value="x2" id="x2"/>
+                        <label for="x2">x2</label>
+                    </div>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <div class="cntrl">
+                        <input type="radio" name="scale" value="x3" id="x3"/>
+                        <label for="x3">x3</label>
+                    </div>
+                </div>
+                
+                <div>
+                    <ul>
+                        {% for ingredient in recipe.ingredients %}
+                        <li itemprop="recipeIngredient">
+                            {% if ingredient.quantity %}
+                            <span data-default="{{ ingredient.quantity }}" class="scalable">{{ ingredient.quantity|format_quantity }}</span>
+                            {% endif %}
+                            {% if ingredient.unit %}
+                            <span data-unit="{{ ingredient.unit }}">{{ ingredient.unit }}</span>
+                            {% endif %}
+                            <span>{{ ingredient.name }}</span>
+                            {% if ingredient.preparation %}, <span class="prep">{{ ingredient.preparation }}</span>{% endif %}
+                            {% if ingredient.notes %} ({{ ingredient.notes }}){% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            
+                <hr/>
+                <h2>Instructions</h2>
+                
+                <div class="temp-controls">
+                    <div class="cntrl">
+                        <input type="radio" name="temp" value="C" id="C" checked/>
+                        <label for="C">°C</label>
+                    </div>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <div class="cntrl">
+                        <input type="radio" name="temp" value="F" id="F"/>
+                        <label for="F">°F</label>
+                    </div>
+                </div>
+
+                <div class="inline-amount-controls">
+                    <div class="cntrl">
+                        <input type="checkbox" id="amounts" name="amounts"/>
+                        <label for="amounts">Show amounts inline</label>
+                    </div>
+                </div>
+
+                <span id="show-amounts" class="recipe-info hidden"></span>
+                
+                <ol>
+                    {% for instruction in recipe.instructions %}
+                    <li itemprop="recipeInstructions">
+                        <input type="checkbox" id="instruction-{{ loop.index }}" />
+                        <label for="instruction-{{ loop.index }}">
+                            {{ instruction.instruction }}
+                            {% if instruction.time_minutes %}
+                            <button class="toast-btn" data-time="{{ instruction.time_minutes * 60 }}" data-label="Step {{ loop.index }}" title="Start timer">
+                                <div class="toast-btn-icon">
+                                    <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.5 5.6a.5.5 0 10-1 0v2.9h-3a.5.5 0 000 1H8a.5.5 0 00.5-.5V5.6z" fill="currentColor"></path>
+                                        <path d="M6.5 1A.5.5 0 017 .5h2a.5.5 0 010 1v.57c1.36.196 2.594.78 3.584 1.64a.715.715 0 01.012-.013l.354-.354-.354-.353a.5.5 0 01.707-.708l1.414 1.415a.5.5 0 11-.707.707l-.353-.354-.354.354a.512.512 0 01-.013.012A7 7 0 117 2.071V1.5a.5.5 0 01-.5-.5zM8 3a6 6 0 10.001 12A6 6 0 008 3z" fill="currentColor"></path>
+                                    </svg>
+                                </div>
+                                <span><b>{{ instruction.time_minutes }}</b> minute{{ 's' if instruction.time_minutes != 1 else '' }}</span>
+                            </button>
+                            {% endif %}
+                        </label>
+                    </li>
+                    {% endfor %}
+                </ol>
+                
+                {% if recipe.tags %}
+                <hr/>
+                <h2>Tags</h2>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    {% for tag in recipe.tags %}
+                    <span style="background: var(--bg-2); padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.875rem;">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </section>
+        </main>
+        
+        <nav>
+            <div>
+                <h3><a href="/">Home</a></h3>
+                <h3><a href="/recipes">All Recipes</a></h3>
+                <h3><a href="/search">Search</a></h3>
+            </div>
+            <div id="settings-options">
+                <button type="button" id="theme-btn" disabled>
+                    Theme<span class="light-text">Auto</span>
+                </button>
+            </div>
+        </nav>
+        
+        <div id="timers"></div>
+        
+        <script>
+        // Basic quantity formatting
+        function formatQuantity(num) {
+            if (num % 1 === 0) return Math.round(num);
+            if (num < 1) {
+                let frac = Fraction(num);
+                return frac.toFraction();
+            }
+            return num.toFixed(2).replace(/\.?0+$/, '');
+        }
+        
+        // Simple fraction handling
+        function Fraction(decimal) {
+            let gcd = function(a, b) {
+                return b ? gcd(b, a % b) : a;
+            };
+            let len = decimal.toString().length - 2;
+            let denominator = Math.pow(10, len);
+            let numerator = decimal * denominator;
+            let divisor = gcd(numerator, denominator);
+            return {
+                toFraction: function() {
+                    let num = numerator / divisor;
+                    let den = denominator / divisor;
+                    if (den === 1) return num.toString();
+                    if (num > den) {
+                        let whole = Math.floor(num / den);
+                        num = num % den;
+                        return whole + ' ' + num + '/' + den;
+                    }
+                    return num + '/' + den;
+                }
+            };
+        }
+        </script>
+    </body>
+</html>

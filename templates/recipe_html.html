@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ recipe.title }}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .recipe-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        .recipe-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .recipe-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+        }
+        .recipe-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+        .recipe-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem 2rem;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .meta-item {
+            text-align: center;
+        }
+        .meta-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+        .meta-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #495057;
+        }
+        .recipe-content {
+            padding: 2rem;
+        }
+        .section {
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .ingredients-list {
+            list-style: none;
+            padding: 0;
+        }
+        .ingredient-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f8f9fa;
+            display: flex;
+            align-items: center;
+        }
+        .ingredient-item:last-child {
+            border-bottom: none;
+        }
+        .ingredient-quantity {
+            font-weight: 600;
+            color: #667eea;
+            min-width: 80px;
+            margin-right: 1rem;
+        }
+        .ingredient-name {
+            flex: 1;
+        }
+        .instructions-list {
+            counter-reset: step-counter;
+        }
+        .instruction-step {
+            counter-increment: step-counter;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .instruction-step::before {
+            content: counter(step-counter);
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 1rem;
+            float: left;
+        }
+        .instruction-text {
+            margin-left: 46px;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .tag {
+            background: #e9ecef;
+            color: #495057;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            color: #6c757d;
+            font-size: 0.875rem;
+            border-top: 1px solid #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="recipe-card">
+        <div class="recipe-header">
+            <h1 class="recipe-title">{{ recipe.title }}</h1>
+            {% if recipe.description %}
+            <p class="recipe-description">{{ recipe.description }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="recipe-meta">
+            {% if recipe.servings %}
+            <div class="meta-item">
+                <div class="meta-label">Servings</div>
+                <div class="meta-value">{{ recipe.servings }}</div>
+            </div>
+            {% endif %}
+            {% if prep_time_formatted %}
+            <div class="meta-item">
+                <div class="meta-label">Prep Time</div>
+                <div class="meta-value">{{ prep_time_formatted }}</div>
+            </div>
+            {% endif %}
+            {% if cook_time_formatted %}
+            <div class="meta-item">
+                <div class="meta-label">Cook Time</div>
+                <div class="meta-value">{{ cook_time_formatted }}</div>
+            </div>
+            {% endif %}
+            {% if total_time_formatted %}
+            <div class="meta-item">
+                <div class="meta-label">Total Time</div>
+                <div class="meta-value">{{ total_time_formatted }}</div>
+            </div>
+            {% endif %}
+            {% if recipe.difficulty %}
+            <div class="meta-item">
+                <div class="meta-label">Difficulty</div>
+                <div class="meta-value">{{ difficulty_display }}</div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="recipe-content">
+            {% if recipe.ingredients %}
+            <div class="section">
+                <h2 class="section-title">Ingredients</h2>
+                <ul class="ingredients-list">
+                    {% for ingredient in recipe.ingredients %}
+                    <li class="ingredient-item">
+                        <span class="ingredient-quantity">
+                            {% if ingredient.quantity %}{{ ingredient.quantity }}{% endif %}
+                            {% if ingredient.unit %} {{ ingredient.unit }}{% endif %}
+                        </span>
+                        <span class="ingredient-name">
+                            {{ ingredient.name }}
+                            {% if ingredient.preparation %}, {{ ingredient.preparation }}{% endif %}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            {% if recipe.instructions %}
+            <div class="section">
+                <h2 class="section-title">Instructions</h2>
+                <div class="instructions-list">
+                    {% for instruction in recipe.instructions %}
+                    <div class="instruction-step">
+                        <div class="instruction-text">{{ instruction.instruction }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if recipe.tags %}
+            <div class="section">
+                <h2 class="section-title">Tags</h2>
+                <div class="tags">
+                    {% for tag in recipe.tags %}
+                    <span class="tag">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="footer">
+            Generated on {{ generated_date }}
+            {% if recipe.source %} | Source: {{ recipe.source }}{% endif %}
+        </div>
+    </div>
+</body>
+</html>
