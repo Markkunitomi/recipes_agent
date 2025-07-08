@@ -8,6 +8,7 @@ from typing import Optional
 from pathlib import Path
 
 from .orchestrators.orchestrator_langgraph import LangGraphRecipeOrchestrator
+from .agents.website_generator import WebsiteGeneratorAgent
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -740,6 +741,71 @@ def cookbook(
             
     except Exception as e:
         console.print(f"[bold red]✗ Compilation error:[/bold red] {str(e)}")
+        if verbose:
+            console.print_exception()
+        return 1
+
+@app.command()
+def website(
+    json_dir: Optional[Path] = typer.Option(None, help="Directory containing JSON recipe files (defaults to output/json)"),
+    config_file: Optional[Path] = typer.Option(None, help="Configuration file"),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose logging"),
+):
+    """Generate a complete website from JSON recipes using strangetom design.
+    
+    This command converts JSON recipe files into a complete website with:
+    - Individual recipe pages with unit conversion
+    - Homepage with recent recipes
+    - Recipe listing pages
+    - Responsive design and navigation
+    
+    Examples:
+      Basic generation:    website
+      Custom JSON dir:     website --json-dir custom_recipes/
+      Verbose output:      website --verbose
+    """
+    
+    # Load configuration
+    settings = Settings.load(config_file)
+    
+    # Use default JSON directory if not specified
+    if json_dir is None:
+        json_dir = Path(settings.output.output_dir) / "json"
+    
+    if verbose:
+        console.print(f"[bold blue]Generating website from:[/bold blue] {json_dir}")
+    
+    # Check if JSON directory exists
+    if not json_dir.exists():
+        console.print(f"[bold red]✗ JSON directory not found:[/bold red] {json_dir}")
+        console.print(f"[yellow]Hint:[/yellow] Generate recipes first with 'process' command")
+        return 1
+    
+    # Check for JSON files
+    json_files = list(json_dir.glob("*.json"))
+    if not json_files:
+        console.print(f"[bold red]✗ No JSON files found in:[/bold red] {json_dir}")
+        return 1
+    
+    try:
+        # Initialize website generator
+        generator = WebsiteGeneratorAgent(settings)
+        
+        # Generate website
+        result = generator.generate_website(json_dir)
+        
+        if result.success:
+            console.print(f"[bold green]✓ Website generated successfully![/bold green]")
+            console.print(f"[bold green]Generated {result.data['recipes_generated']} recipe pages[/bold green]")
+            console.print(f"[bold green]Website directory:[/bold green] {result.data['website_dir']}")
+            console.print(f"[bold cyan]View at:[/bold cyan] {result.metadata['website_url']}")
+            return 0
+        else:
+            console.print(f"[bold red]✗ Website generation failed:[/bold red] {result.error}")
+            return 1
+            
+    except Exception as e:
+        console.print(f"[bold red]✗ Unexpected error:[/bold red] {str(e)}")
         if verbose:
             console.print_exception()
         return 1
