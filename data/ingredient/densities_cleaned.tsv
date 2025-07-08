@@ -1,0 +1,641 @@
+Food name and description	category	Density in g/ml (including mass and bulk density)	Specific gravity	BiblioID	Update Version 2.0	Unnamed: 5	Unnamed: 6
+Apple juice, canned or bottled, unsweetened, with added ascorbic acid	Beverages, non alcoholic (including soft drinks and juices)	1.04	1.05	USDA	x		
+Apple juice, canned or bottled, unsweetened, without added ascorbic acid	Beverages, non alcoholic (including soft drinks and juices)	1.04	1.05	USDA	x		
+Beverages, fruit juice drink, reduced sugar, with vitamin E added	Beverages, non alcoholic (including soft drinks and juices)	1.04	1.05	USDA	x		
+Carbonated beverage, tonic water	Beverages, non alcoholic (including soft drinks and juices)	1.02	1.02	USDA	x		
+Cranberry juice cocktail, bottled	Beverages, non alcoholic (including soft drinks and juices)	1.05	1.05	USDA	x		
+Cranberry-apple juice drink, bottled	Beverages, non alcoholic (including soft drinks and juices)	1.06	1.07	USDA	x		
+Fruit drinks, low calories, undiluted	Beverages, non alcoholic (including soft drinks and juices)	1.02	1.010-1.030	UK 6th			
+Fruit drinks, undiluted	Beverages, non alcoholic (including soft drinks and juices)	1.105	1.090-1.120	UK 6th			
+Fruit juice	Beverages, non alcoholic (including soft drinks and juices)	1.06		FNDDS 4.1			
+Fruit juice drinks	Beverages, non alcoholic (including soft drinks and juices)	1.04	1.040	UK 6th			
+Fruit juice drinks, ready to drink	Beverages, non alcoholic (including soft drinks and juices)	1.0350000000000001	1.030-1.040	UK 6th			
+Grape juice	Beverages, non alcoholic (including soft drinks and juices)	1.054		S&W			
+Grape juice, canned or bottled, unsweetened, with added ascorbic acid	Beverages, non alcoholic (including soft drinks and juices)	1.06	1.07	USDA	x		
+Grape juice, canned or bottled, unsweetened, without added ascorbic acid	Beverages, non alcoholic (including soft drinks and juices)	1.06	1.07	USDA	x		
+Guanabana nectar, canned	Beverages, non alcoholic (including soft drinks and juices)	1.02	1.02	USDA	x		
+Guava nectar, canned	Beverages, non alcoholic (including soft drinks and juices)	1.02	1.02	USDA	x		
+Ice, crushed	Beverages, non alcoholic (including soft drinks and juices)	0.56-0.72		ASI	x		
+Juice, apple and grape blend, with added ascorbic acid	Beverages, non alcoholic (including soft drinks and juices)	1.05	1.05	USDA			
+Juice, apple, grape and pear blend, with added ascorbic acid and calcium	Beverages, non alcoholic (including soft drinks and juices)	1.05	1.05	USDA			
+Lemonade, frozen concentrate, pink	Beverages, non alcoholic (including soft drinks and juices)	1.24	1.24	USDA			
+Lemonade, frozen concentrate, white	Beverages, non alcoholic (including soft drinks and juices)	1.17	1.17	USDA			
+Lime juice cordial, undiluted	Beverages, non alcoholic (including soft drinks and juices)	1.102	1.102	UK 6th			
+Mango nectar, canned	Beverages, non alcoholic (including soft drinks and juices)	1.00	1.00	USDA	x		
+Meal supplement drink, NESTLE, SUPLIGEN, canned, peanut flavor	Beverages, non alcoholic (including soft drinks and juices)	1.04	1.04	USDA	x		
+Orange juice	Beverages, non alcoholic (including soft drinks and juices)	1.038		S&W			
+Orange juice with calcium	Beverages, non alcoholic (including soft drinks and juices)	1.038		S&W			
+Orange juice, canned, unsweetened	Beverages, non alcoholic (including soft drinks and juices)	1.04	1.05	USDA	x		
+Orange soda (sweetened with sugar)	Beverages, non alcoholic (including soft drinks and juices)	1.029		S&W			
+QUAKER OATS, PROPEL Fitness Water, fruit-flavored, non-carbonated	Beverages, non alcoholic (including soft drinks and juices)	1.00	1.00	USDA	x		
+Soft drinks, cola type	Beverages, non alcoholic (including soft drinks and juices)	1.04	1.040	UK 6th			
+Soft drinks, diet soda	Beverages, non alcoholic (including soft drinks and juices)	0.988		S&W			
+Soft drinks, lemonade type	Beverages, non alcoholic (including soft drinks and juices)	1.02	1.020	UK 6th			
+Soft drinks, lucozade type	Beverages, non alcoholic (including soft drinks and juices)	1.07	1.070	UK 6th			
+Soy drink	Beverages, non alcoholic (including soft drinks and juices)	1.08		FNDDS 4.1			
+Soya + milk + sugar	Beverages, non alcoholic (including soft drinks and juices)	1.05		KEN	x		
+Soya + sugar	Beverages, non alcoholic (including soft drinks and juices)	1.05		KEN	x		
+Sports drink, COCA-COLA, POWERADE, lemon-lime flavored, ready-to-drink	Beverages, non alcoholic (including soft drinks and juices)	1.03	1.03	USDA	x		
+Sports drink, PEPSICO QUAKER GATORADE, GATORADE, original, fruit-flavored, ready-to-drink	Beverages, non alcoholic (including soft drinks and juices)	1.03	1.03	USDA	x		
+Tamarind nectar, canned	Beverages, non alcoholic (including soft drinks and juices)	1.01	1.01	USDA	x		
+Water	Beverages, non alcoholic (including soft drinks and juices)	1.0	1	CG	x		
+Water, ice, 0 °C	Beverages, non alcoholic (including soft drinks and juices)	0.916		TB			
+Water, ice, 4 °C	Beverages, non alcoholic (including soft drinks and juices)	0.999		TB			
+Water, liquid, 20 °C	Beverages, non alcoholic (including soft drinks and juices)	0.998		TB			
+Water, mineralwater	Beverages, non alcoholic (including soft drinks and juices)	1.035-1.04		DK			
+Coffee, brewed	Tea, cacao, coffee and drinking powders	1		FNDDS 4.1			
+Coffee, expresso	Tea, cacao, coffee and drinking powders	1		FNDDS 4.1			
+Coffee, green (beans)	Tea, cacao, coffee and drinking powders	0.59-0.62	0.59-0.62	ASI	x		
+Coffee, powder (nescafé)	Tea, cacao, coffee and drinking powders	0.25		RC			
+Coffee, roasted (beans)	Tea, cacao, coffee and drinking powders	0.35-0.38	0.35-0.38	ASI	x		
+Miso, broth, ready to drink	Tea, cacao, coffee and drinking powders	1.06		FNDDS 4.1			
+Powder, chocolate drinking powder	Tea, cacao, coffee and drinking powders	0.5-0.55		RC			
+Powders	Tea, cacao, coffee and drinking powders	0.2-0.25		KEN	x		
+Tea, black (tea leaves)	Tea, cacao, coffee and drinking powders	0.48		KEN	x		
+Tea, herbal, Ciakimora (leaves + water)	Tea, cacao, coffee and drinking powders	1		KEN	x		
+Tea, herbal, Ciakimora leaves 	Tea, cacao, coffee and drinking powders	0.23		KEN	x		
+Tea, flakes	Tea, cacao, coffee and drinking powders	0.38		ASI	x		
+Tea, powdered	Tea, cacao, coffee and drinking powders	0.43		ASI	x		
+Tea, liquid	Tea, cacao, coffee and drinking powders	1		FNDDS 4.1			
+Tea, only (tea leaves + water)	Tea, cacao, coffee and drinking powders	1		KEN	x		
+Tea, ready-to-drink, ARIZONA iced tea, with lemon flavor	Tea, cacao, coffee and drinking powders	1.03	1.04	USDA	x		
+Tea, ready-to-drink, LIPTON BRISK iced tea, with lemon flavor	Tea, cacao, coffee and drinking powders	1.03	1.03	USDA	x		
+Tea, ready-to-drink, NESTLE, COOL NESTEA ice tea lemon flavor	Tea, cacao, coffee and drinking powders	1.03	1.04	USDA	x		
+Beer, lager	Beer	1.005	1.005	UK 6th			
+Beer, light	Beer	1.00	1.00	USDA	x		
+Beer, light, BUD LIGHT	Beer	1.00	1.00	USDA	x		
+Beer, light, BUDWEISER SELECT	Beer	1.00	1.00	USDA	x		
+Beer, light, MICHELOB ULTRA	Beer	1.00	1.00	USDA	x		
+Beer, local (non specific)	Beer	0.96		KEN	x		
+Beer, pale ale	Beer	1.003	1.003	UK 6th			
+Beer, pilsner	Beer	1.007		DK			
+Beer, pilsner, 4 °C	Beer	1.008		TB			
+Beer, regular, all	Beer	1.01	1.01	USDA	x		
+Beer, regular, BUDWEISER	Beer	1.00	1.01	USDA	x		
+Beer, stout, bottled	Beer	1.014	1.014	UK 6th			
+Beer, stout, extra	Beer	1.002	1.002	UK 6th			
+Beer, strong ale	Beer	1.018	1.018	UK 6th			
+Beer, type bitter or brown ale	Beer	1.008	1.008	UK 6th			
+Beer, type draught	Beer	1.004	1.004	UK 6th			
+Beer, type Keg	Beer	1.001	1.001	UK 6th			
+Beer, type mild, draught	Beer	1.009	1.009	UK 6th			
+Beer, commercial (white cap etc.)	Beer	0.97		KEN	x		
+Alcohol, ethyl	Spirits and liqueurs	0.789		TB			
+Amaretto	Spirits and liqueurs	1.1	1.1	CG	x		
+Amaretto di Saranno	Spirits and liqueurs	1.08	1.08	CG	x		
+Anisette	Spirits and liqueurs	1.175	1.175	CG	x		
+Apricot brandy	Spirits and liqueurs	1.06	1.06	CG	x		
+Apricot liquor	Spirits and liqueurs	1.09	1.09	CG	x		
+Bailey's irish cream	Spirits and liqueurs	1.05	1.05	CG	x		
+Benedictine	Spirits and liqueurs	1.04	1.04	CG	x		
+Benedictine D.O.M.	Spirits and liqueurs	1.07	1.07	CG	x		
+Blackberry brandy	Spirits and liqueurs	1.06	1.06	CG	x		
+Blackberry liquor	Spirits and liqueurs	1.1	1.1	CG	x		
+Blue curacao	Spirits and liqueurs	1.11	1.11	CG	x		
+Brandy	Spirits and liqueurs	1.04	1.04	CG	x		
+Campari	Spirits and liqueurs	1.06	1.06	CG	x		
+Cherry brandy	Spirits and liqueurs	1.06	1.06	CG	x		
+Cherry liqueur	Spirits and liqueurs	1.12	1.12	CG	x		
+Coffee liquor	Spirits and liqueurs	1.13	1.13	CG	x		
+Cointreau	Spirits and liqueurs	1.04	1.04	CG	x		
+Crème de almond	Spirits and liqueurs	1.16	1.16	CG	x		
+Crème de banana	Spirits and liqueurs	1.14	1.14	CG	x		
+Crème de cacao	Spirits and liqueurs	1.14	1.14	CG	x		
+Creme de cassis	Spirits and liqueurs	1.18	1.18	CG	x		
+Crème de noyaux	Spirits and liqueurs	1.165	1.165	CG	x		
+Drambuie	Spirits and liqueurs	1.08	1.08	CG	x		
+Frangelico	Spirits and liqueurs	1.08	1.08	CG	x		
+Galliano	Spirits and liqueurs	1.11	1.11	CG	x		
+Green chartreuse	Spirits and liqueurs	1.01	1.01	CG	x		
+Green crème de menthe	Spirits and liqueurs	1.12	1.12	CG	x		
+Kummel	Spirits and liqueurs	1.04	1.04	CG	x		
+Liqueur	Spirits and liqueurs	1.03-1.150		DK			
+Liqueur, type advocaat	Spirits and liqueurs	1.093	1.093	UK 6th			
+Liqueur, type cherry brandy	Spirits and liqueurs	1.093	1.093	UK 6th			
+Liqueur, type curacao	Spirits and liqueurs	1.052	1.052	UK 6th			
+Midori melon liquor	Spirits and liqueurs	1.05	1.05	CG	x		
+Orange curacao	Spirits and liqueurs	1.08	1.08	CG	x		
+Parfrait d'amour	Spirits and liqueurs	1.13	1.13	CG	x		
+Peach brandy	Spirits and liqueurs	1.06	1.06	CG	x		
+Peach liqueur	Spirits and liqueurs	1.04	1.04	CG	x		
+Peppermint schnapps	Spirits and liqueurs	1.04	1.04	CG	x		
+Port	Spirits and liqueurs	1.026	1.026	UK 6th			
+Rock and Rye	Spirits and liqueurs	1.05	1.05	CG	x		
+Sherry, dry	Spirits and liqueurs	0.988	0.988	UK 6th			
+Sherry, medium	Spirits and liqueurs	0.998	0.998	UK 6th			
+Sherry, sweet	Spirits and liqueurs	1.009	1.009	UK 6th			
+Sloe gin	Spirits and liqueurs	1.04	1.04	CG	x		
+Southern comfort	Spirits and liqueurs	0.97	0.97	CG	x		
+Spirits, 40% alcohol	Spirits and liqueurs	0.95	0.950	UK 6th			
+Spirits, 45% alcohol (whiskey)	Spirits and liqueurs	0.939		DK			
+Spirits, 70% alcohol	Spirits and liqueurs	0.885		DK			
+Spirits, 75% alcohol	Spirits and liqueurs	0.873		DK			
+Strawberry liqueur	Spirits and liqueurs	1.12	1.12	CG	x		
+Tia Maria	Spirits and liqueurs	1.09	1.09	CG	x		
+Triple sec	Spirits and liqueurs	1.09	1.09	CG	x		
+Tuaca	Spirits and liqueurs	0.98	0.98	CG	x		
+Vermouth, dry	Spirits and liqueurs	1.005	1.005	UK 6th			
+Vermouth, sweet	Spirits and liqueurs	1.046	1.046	UK 6th			
+White crème de cacao	Spirits and liqueurs	1.14	1.14	CG	x		
+White crème de menthe	Spirits and liqueurs	1.12	1.12	CG	x		
+Yellow chartreuse	Spirits and liqueurs	1.06	1.06	CG	x		
+Cider, dry	Wine and Cider	1.007	1.007	UK 6th			
+Cider, sweet	Wine and Cider	1.012	1.012	UK 6th			
+Cider, vintage	Wine and Cider	1.017	1.017	UK 6th			
+Wine, red	Wine and Cider	0.998	0.998	UK 6th			
+Wine, rose, medium	Wine and Cider	1.003	1.003	UK 6th			
+Wine, table, all	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, red	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, red, Barbera	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, red, Burgundy	Wine and Cider	1.00	1.00	USDA	x		
+Wine, table, red, Cabernet Franc	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, red, Cabernet Sauvignon	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, red, Carignane	Wine and Cider	0.99	1.00	USDA	x		
+Wine, table, red, Claret	Wine and Cider	0.99	1.00	USDA	x		
+Wine, table, red, Gamay	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, red, Lemberger	Wine and Cider	0.99	1.00	USDA	x		
+Wine, table, red, Merlot	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, red, Mouvedre	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, red, Petite Sirah	Wine and Cider	0.99	1.00	USDA	x		
+Wine, table, red, Pinot Noir	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, red, Sangiovese	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, red, Syrah	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, red, Zinfandel	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, white	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, white, Chardonnay	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, white, Chenin Blanc	Wine and Cider	1.00	1.00	USDA	x		
+Wine, table, white, Fume Blanc	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, white, Gewurztraminer	Wine and Cider	0.99	1.00	USDA	x		
+Wine, table, white, late harvest	Wine and Cider	1.04	1.04	USDA	x		
+Wine, table, white, late harvest, Gewurztraminer	Wine and Cider	1.03	1.03	USDA	x		
+Wine, table, white, Muller Thurgau	Wine and Cider	1.00	1.00	USDA	x		
+Wine, table, white, Muscat	Wine and Cider	1.01	1.01	USDA	x		
+Wine, table, white, Pinot Blanc	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, white, Pinot Gris (Grigio)	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, white, Riesling	Wine and Cider	1.00	1.00	USDA	x		
+Wine, table, white, Sauvignon Blanc	Wine and Cider	0.99	0.99	USDA	x		
+Wine, table, white, Semillon	Wine and Cider	1.00	1.00	USDA	x		
+Wine, white	Wine and Cider	1-1.04		DK			
+Wine, white, dry or sparkling	Wine and Cider	0.995	0.995	UK 6th			
+Wine, white, medium	Wine and Cider	1.005	1.005	UK 6th			
+Wine, white, sweet	Wine and Cider	1.016	1.016	UK 6th			
+Milk (at 15.6 C)	Milk	1.0350000000000001	1.02-1.05	CSG	x		
+Milk (non-fat dry)	Milk	0.56		ASI	x		
+Milk (powdered whole)	Milk	0.56		ASI	x		
+Milk (powdered)	Milk	0.21		ASI	x		
+Milk shake, fruit and other	Milk	1		FNDDS 4.1			
+Milk, acidophilus cultured	Milk	1.01		DK			
+Milk, buttermilk	Milk	1.022		DK			
+Milk, chocolate milk, skimmed	Milk	1.056		DK			
+Milk, cow, whole	Milk	1.04		KEN	x		
+Milk, evaporated	Milk	1.07	1.07	UK 6th			
+Milk, goat, whole	Milk	1.08		FNDDS 4.1			
+Milk, liquid (whole, semi-skimmed, skimmed)	Milk	1.03	1.03	UK 6th			
+Milk, liquid, partially skimmed	Milk	1.034		DK			
+Milk, liquid, skimmed	Milk	1.033		TB			
+Milk, liquid, skimmed	Milk	1.036		DK			
+Milk, liquid, whole	Milk	1.030		TB			
+Milk, liquid, whole	Milk	1.031		DK			
+Butter	Dairy products	0.911		TB			
+Butter, margarine	Dairy products	0.96		RC			
+Buttermilk, dried	Dairy products	0.5		ASI	x		
+Casein	Dairy products	0.58		ASI	x		
+Cheese, emmentaler, grated	Dairy products	0.34		RC			
+Cream, 13% fat	Dairy products	1.013		DK			
+Cream, 38% fat	Dairy products	0.984		DK			
+Cream, 9% fat	Dairy products	1.017		DK			
+Cream, double (about 40-50% fat)	Dairy products	0.94	0.94	UK 6th			
+Cream, heavy	Dairy products	0.994		TB			
+Cream, light	Dairy products	1.012		TB			
+Cream, single (about 20% fat)	Dairy products	1.0	1.00	UK 6th			
+Cream, sour (crème fraiche about 18% fat)	Dairy products	1.005		DK			
+Cream, sour (crème fraiche about 38% fat)	Dairy products	0.978		DK			
+Cream, whipped	Dairy products	0.496		S&W			
+Cream, whipping (about 40% fat)	Dairy products	0.96	0.96	UK 6th			
+Ice cream 	Dairy products	0.554		S&W			
+Ice cream, dairy	Dairy products	0.61	0.61	UK 6th			
+Ice cream, light (formerly ice milk)	Dairy products	0.56		FNDDS 4.1			
+Ice cream, light, no sugar added	Dairy products	0.58		FNDDS 4.1			
+Ice cream, no sugar added	Dairy products	0.54		FNDDS 4.1			
+Ice cream, non dairy	Dairy products	0.51	0.51	UK 6th			
+Ice cream, regular	Dairy products	0.56		FNDDS 4.1			
+Ice cream, rich	Dairy products	0.62		FNDDS 4.1			
+Sour milk, cow, whole	Dairy products	0.98		KEN	x		
+Yoghurt, berry, low fat, artificially sweetened	Dairy products	1.06		FNDDS 4.1			
+Yoghurt, fruits	Dairy products	1.045-1.06		DK			
+Yoghurt, low fat, fruit	Dairy products	1.08	1.08	UK 6th			
+Yoghurt, plain, unsweetened	Dairy products	1.06		FNDDS 4.1			
+Yoghurt, plain, unsweetened	Dairy products	1.031		DK			
+Yoghurt, strawberry, low fat	Dairy products	1.08		FNDDS 4.1			
+Cooking oil, elianto oil, salad, golden fry, rina	Oils	0.88		KEN	x		
+Cooking oil, sima	Oils	0.88		KEN	x		
+Cooking oil, tily, chipo, pura	Oils	0.88		KEN	x		
+Oil, cod (at 15.6 C)	Oils	0.928	0.928	CSG	x		
+Oil, corn (at 15.6 C)	Oils	0.924	0.924	CSG	x		
+Oil, cotton seed (at 15.6 C)	Oils	0.905	0.88-0.93	CSG	x		
+Oil, lard (at 15.6 C)	Oils	0.92	0.91-0.93	CSG	x		
+Oil, linseed (at 15.6 C)	Oils	0.935	0.93-0.94	CSG	x		
+Oil, olive (at 15.6 C)	Oils	0.915	0.91-0.92	CSG	x		
+Oil, other than palmoil	Oils	0.92		DK			
+Oil, palm (at 15.6 C)	Oils	0.924	0.924	CSG	x		
+Oil, palmoil	Oils	0.89		DK			
+Oil, peanut (at 15.6 C)	Oils	0.92	0.92	CSG	x		
+Oil, rapeseed (at 20 C)	Oils	0.92	0.92	CSG	x		
+Oil, seasame seed (at 15.6 C)	Oils	0.923	0.923	CSG	x		
+Oil, sunflower	Oils	0.96		RC			
+Oil, vegetable, coconut	Oils	0.924		TB			
+Oil, vegetable, corn	Oils	0.922		TB			
+Oil, vegetable, olive	Oils	0.918		TB			
+Oil, vegetable, palm	Oils	0.915		TB			
+Oil, vegetable, peanut	Oils	0.914		TB			
+Oil, vegetable, soya	Oils	0.927		TB			
+Oil, whale (at 15.6 C)	Oils	0.925	0.925	CSG	x		
+Animal fat	Fats and other	0.7		KEN	x		
+Lard	Fats and other	0.919		TB			
+Lard (at 15.6 C)	Fats and other	0.96	0.96	CSG	x		
+Mayonnaise, light	Fats and other	1		TB			
+Mayonnaise, traditional	Fats and other	0.91		TB			
+Solid vegetable fat kimbo	Fats and other	0.6		KEN	x		
+Solid vegetable fat rina 	Fats and other	0.67		KEN	x		
+Barley	Cereal and cereal products	0.62		TB			
+Barley malt, flour	Cereal and cereal products	0.72		ASI	x		
+Barley, fine ground	Cereal and cereal products	0.74		ASI	x		
+Barley, meal	Cereal and cereal products	0.45		ASI	x		
+Barley, flour	Cereal and cereal products	0.61		ASI	x		
+Barley, flour, malted 	Cereal and cereal products	0.64		ASI	x		
+Barley, ground	Cereal and cereal products	0.38-0.42		ASI	x		
+Barley, malted	Cereal and cereal products	0.49		ASI	x		
+Barley, rolled	Cereal and cereal products	0.34-0.38		ASI	x		
+Barley, scoured	Cereal and cereal products	0.66		ASI	x		
+Barley, whole	Cereal and cereal products	0.61-0.69		ASI	x		
+Biscuits	Cereal and cereal products	0.41-0.53		FNDDS 4.1			
+Bran	Cereal and cereal products	0.56		ASI	x		
+Bread	Cereal and cereal products	0.29		FNDDS 4.1			
+Bread, cornbread 	Cereal and cereal products	0.433		S&W			
+Bread, roll, soft	Cereal and cereal products	0.18		FNDDS 4.1			
+Bread, white	Cereal and cereal products	0.42		KEN	x		
+Bread, white, sliced, prepacked	Cereal and cereal products	0.29		FNDDS 4.1			
+Breadcrumbs	Cereal and cereal products	0.45		RC			
+Breakfast cereal, cornflakes (dry cereal) 	Cereal and cereal products	0.117		S&W			
+Breakfast cereal, muesli w/ fruits&nuts	Cereal and cereal products	0.37		FNDDS 4.1			
+Breakfast cereal, raisin bran	Cereal and cereal products	0.26		FNDDS 4.1			
+Breakfast cereal, type Cheerios	Cereal and cereal products	0.13		FNDDS 4.1			
+Breakfast cereal, type Corn flakes	Cereal and cereal products	0.1		RC			
+Breakfast cereal, type Crispix	Cereal and cereal products	0.13		FNDDS 4.1			
+Breakfast cereal, type frosted flakes	Cereal and cereal products	0.18		FNDDS 4.1			
+Breakfast cereal, type Just Right	Cereal and cereal products	0.24		FNDDS 4.1			
+Breakfast cereal, type rice krispies	Cereal and cereal products	0.12		FNDDS 4.1			
+Buckwheat, bran	Cereal and cereal products	0.25		ASI	x		
+Buckwheat, flour	Cereal and cereal products	0.66		ASI	x		
+Buckwheat, whole	Cereal and cereal products	0.59-0.66		ASI	x		
+Bulrush mille, fermented flour	Cereal and cereal products	0.56		KEN	x		
+Cake 	Cereal and cereal products	0.415		S&W			
+Cake mix	Cereal and cereal products	0.7		ASI	x		
+Corn/maize flour, white	Cereal and cereal products	0.55		KEN	x		
+Corn/maize starch, loosely packed	Cereal and cereal products	0.54		TB			
+Corn/maize sugar	Cereal and cereal products	0.33		ASI	x		
+Corn/maize, boiled	Cereal and cereal products	0.90		KEN	x		
+Corn/maize, boiled with fat	Cereal and cereal products	0.90		KEN	x		
+Corn/maize, bran	Cereal and cereal products	0.21		ASI	x		
+Corn/maize, chops (coarse)	Cereal and cereal products	0.64-0.70		ASI	x		
+Corn/maize, chops (fine)	Cereal and cereal products	0.58-0.62		ASI	x		
+Corn/maize, chops (medium)	Cereal and cereal products	0.61-0.67		ASI	x		
+Corn/maize, cobs	Cereal and cereal products	0.27		ASI	x		
+Corn/maize, cracked (coarse)	Cereal and cereal products	0.64		ASI	x		
+Corn/maize, ear	Cereal and cereal products	0.9		TB			
+Corn/maize, ear	Cereal and cereal products	0.9		ASI	x		
+Corn/maize, fermented flour 	Cereal and cereal products	0.55		KEN	x		
+Corn/maize, flour	Cereal and cereal products	0.82		ASI	x		
+Corn/maize, meal	Cereal and cereal products	0.64		ASI	x		
+Corn/maize, flour 	Cereal and cereal products	0.62		ASI	x		
+Corn/maize, germ flour	Cereal and cereal products	0.56		ASI	x		
+Corn/maize, gluten flour	Cereal and cereal products	0.51-0.69		ASI	x		
+Corn/maize, grits	Cereal and cereal products	0.64-0.69		ASI	x		
+Corn/maize, ground	Cereal and cereal products	0.54-0.58		ASI	x		
+Corn/maize, kibbled	Cereal and cereal products	0.32-0.35		ASI	x		
+Corn/maize, mash	Cereal and cereal products	0.72		ASI	x		
+Corn/maize, shelled	Cereal and cereal products	0.72		TB			
+Corn/maize, starch	Cereal and cereal products	0.67		ASI	x		
+Corn/maize, starch, tightly packed	Cereal and cereal products	0.63		TB			
+Corn/maize, white, boiled	Cereal and cereal products	0.85		KEN	x		
+Corn/maize, white, dry	Cereal and cereal products	0.81		KEN	x		
+Corn/maize, whole kernel, dried, cracked (Njenga)	Cereal and cereal products	0.81		KEN	x		
+Corn/maize, whole kernel, dried, cracked, boiled (Njenga)	Cereal and cereal products	1.07		KEN	x		
+Corn/maize, whole shelled	Cereal and cereal products	0.72		ASI	x		
+Donut mix	Cereal and cereal products	0.64		ASI	x		
+Dough mix	Cereal and cereal products	0.59		ASI	x		
+Finger millet, fermented flour	Cereal and cereal products	0.61		KEN	x		
+Millet	Cereal and cereal products	0.64		ASI	x		
+Millet	Cereal and cereal products	0.64		TB			
+Millet flour, bulrush	Cereal and cereal products	0.56		KEN	x		
+Millet flour, finger	Cereal and cereal products	0.61		KEN	x		
+Millet, bulrush	Cereal and cereal products	0.90		KEN	x		
+Millet, finger	Cereal and cereal products	0.81		KEN	x		
+Oat Flour	Cereal and cereal products	0.53		ASI	x		
+Oat middlings	Cereal and cereal products	0.61		ASI	x		
+Oats	Cereal and cereal products	0.41		TB			
+Oats	Cereal and cereal products	0.43		ASI	x		
+Oats groats, whole	Cereal and cereal products	0.74		ASI	x		
+Oats, ground	Cereal and cereal products	0.46		ASI	x		
+Oats, hulls	Cereal and cereal products	0.13		ASI	x		
+Oats, rolled	Cereal and cereal products	0.30-0.38		ASI	x		
+Pasta, short macaroni style, boiled	Cereal and cereal products	0.55		RC			
+Pasta, short macaroni style, raw	Cereal and cereal products	0.39		RC			
+Pasta/ noodles, boiled	Cereal and cereal products	0.59		KEN	x		
+Porridge flour bonavist, boiled	Cereal and cereal products	0.73		KEN	x		
+Porridge flour bonavist, raw	Cereal and cereal products	0.84		KEN	x		
+Porridge flour ken-uji + lemon extract	Cereal and cereal products	0.54		KEN	x		
+Porridge flour ken-uji:F.mill, bul, sorg, wheat	Cereal and cereal products	0.60		KEN	x		
+Porridge, maize, flour + water	Cereal and cereal products	1.05		KEN	x		
+Rice	Cereal and cereal products	0.72		ASI	x		
+Rice, boiled	Cereal and cereal products	0.73		KEN	x		
+Rice, boiled with fat	Cereal and cereal products	0.70		KEN	x		
+Rice, bran	Cereal and cereal products	0.42		ASI	x		
+Rice, hulled	Cereal and cereal products	0.75		TB			
+Rice, puffed	Cereal and cereal products	0.1		ASI	x		
+Rice, raw	Cereal and cereal products	0.85		KEN	x		
+Rice, rough	Cereal and cereal products	0.58		TB			
+Rice, white, boiled	Cereal and cereal products	0.73		RC			
+Rice, white, raw	Cereal and cereal products	0.82		RC			
+Rye	Cereal and cereal products	0.72		TB			
+Rye, bran	Cereal and cereal products	0.24-0.32		ASI	x		
+Rye, flour 	Cereal and cereal products	0.67		ASI	x		
+Rye, malted	Cereal and cereal products	0.51		ASI	x		
+Rye, middlings	Cereal and cereal products	0.67		ASI	x		
+Rye, shorts	Cereal and cereal products	0.54		ASI	x		
+Rye, whole	Cereal and cereal products	0.69-0.72		ASI	x		
+Semolina, raw	Cereal and cereal products	0.78		RC			
+Sorghum, fermented flour	Cereal and cereal products	0.54		KEN	x		
+Sorghum, flour	Cereal and cereal products	0.54		KEN	x		
+Sorghum, seed	Cereal and cereal products	0.51-0.56		ASI	x		
+Soy, flour 	Cereal and cereal products	0.7		ASI	x		
+Soya, flour 	Cereal and cereal products	0.64		ASI	x		
+Wheat	Cereal and cereal products	0.77		TB			
+Wheat, bran	Cereal and cereal products	0.18-0.26		ASI	x		
+Wheat, cracked	Cereal and cereal products	0.56		ASI	x		
+Wheat, cut	Cereal and cereal products	0.74		ASI	x		
+Wheat, flour	Cereal and cereal products	0.48		ASI	x		
+Wheat, flour	Cereal and cereal products	0.58		KEN	x		
+Wheat, flour 	Cereal and cereal products	0.67		ASI	x		
+Wheat, flour 	Cereal and cereal products	0.521		S&W			
+Wheat, flour, malted	Cereal and cereal products	0.66		ASI	x		
+Wheat, flour, white	Cereal and cereal products	0.67		RC			
+Wheat, flour, wholemeal	Cereal and cereal products	0.55		RC			
+Wheat, gluten	Cereal and cereal products	0.69		ASI	x		
+Wheat, hulls	Cereal and cereal products	0.7		ASI	x		
+Wheat, middlings	Cereal and cereal products	0.24		ASI	x		
+Wheat, shaved	Cereal and cereal products	0.54		ASI	x		
+Wheat, whole	Cereal and cereal products	0.72-0.83		ASI	x		
+Whey	Cereal and cereal products	0.56		ASI	x		
+Arrowroot/cocoyam, boiled	Tubers and products	0.54		KEN	x		
+Arrowroot/cocoyam, raw	Tubers and products	0.52		KEN	x		
+Cassava,flour	Tubers and products	0.55		KEN	x		
+Cassava, boiled	Tubers and products	0.63		KEN	x		
+Cassava, raw	Tubers and products	0.63		KEN	x		
+Potato, english, boiled	Tubers and products	0.59		KEN	x		
+Potato, english, raw	Tubers and products	0.59		KEN	x		
+Potatoes, flakes	Tubers and products	0.21		ASI	x		
+Potatoes, powdered	Tubers and products	0.77		ASI	x		
+Sweet potato, boiled	Tubers and products	0.65		KEN	x		
+Sweet potato, raw	Tubers and products	0.44		KEN	x		
+Yam, boiled	Tubers and products	0.79		KEN	x		
+Yam, raw	Tubers and products	0.66		KEN	x		
+Almonds	Nuts and seeds	0.46		ASI	x		
+Cashews	Nuts and seeds	0.5		ASI	x		
+Coconut Chips	Nuts and seeds	0.61		ASI	x		
+Flaxseed	Nuts and seeds	0.7		ASI	x		
+Nuts	Nuts and seeds	0.63		FNDDS 4.1			
+Peanuts	Nuts and seeds	0.53		ASI	x		
+Peanuts, shelled	Nuts and seeds	0.69		ASI	x		
+Peanuts, unshelled	Nuts and seeds	0.27-0.38		ASI	x		
+Pistachio, raw, with shell	Nuts and seeds	0.6		RC			
+Pistachio, raw, without shell	Nuts and seeds	0.646		RC			
+Rapeseed	Nuts and seeds	0.77		ASI	x		
+Sunflower, seed	Nuts and seeds	0.62		ASI	x		
+Apple slices, dried	Fruits	0.24		ASI	x		
+Loquat	Fruits	0.6		KEN	x		
+Paw Paw, unripe	Fruits	0.56		KEN	x		
+Alfalfa, leaf, meal	Vegetables	0.23		ASI	x		
+Alfalfa,meal, dehydrated 13%	Vegetables	0.26-0.29		ASI	x		
+Alfalfa, meal, dehydrated 17%	Vegetables	0.29-0.35		ASI	x		
+Alfalfa, meal, fine ground	Vegetables	0.24-0.35		ASI	x		
+Alfalfa, meal, suncured 13%	Vegetables	0.22		ASI	x		
+Alfalfa, seed	Vegetables	0.72-0.77		ASI	x		
+Alfalfa, stem meal	Vegetables	0.19		ASI	x		
+Carrot, raw, chopped	Vegetables	0.54		KEN	x		
+Carrot, raw, grated	Vegetables	0.71		KEN	x		
+Cauliflower, boiled	Vegetables	0.45		RC			
+Chili, green	Vegetables	0.5		KEN	x		
+Chili, red	Vegetables	0.5		KEN	x		
+French green beans	Vegetables	0.53		KEN	x		
+Fresh green peas (minji)	Vegetables	0.73		KEN	x		
+Leaves, managu, raw (black night shade)	Vegetables	0.2		KEN	x		
+Leaves, onion, spring onion, raw	Vegetables	0.44		KEN	x		
+Corn/maize, green, sweet corn, boiled	Vegetables	0.73		KEN	x		
+Corn/maize, green, sweet corn, raw	Vegetables	0.61		KEN	x		
+Olives, green, with stone	Vegetables	0.65		RC			
+Onions, chopped	Vegetables	0.22		ASI	x		
+Onions, minced	Vegetables	0.13		ASI	x		
+Onions, powdered	Vegetables	0.4		ASI	x		
+Onions, fried, cubed	Vegetables	0.75		RC			
+Onions, raw, cubed	Vegetables	0.55		RC			
+Salad, green, leaves, raw	Vegetables	0.06		RC			
+Spinach, frozen, cooked	Vegetables	1.046		RC			
+Spinach, leaves, raw	Vegetables	0.08		RC			
+Sweet pepper, raw, cubes	Vegetables	0.51		RC			
+Sweet pepper, raw, half rings	Vegetables	0.39		RC			
+Beans, white	Legumes	0.69-0.77		ASI	x		
+Cowpeas	Legumes	0.72		ASI	x		
+Cowpeas, dried, boiled	Legumes	0.75		KEN	x		
+Cowpeas, dried, raw	Legumes	0.96		KEN	x		
+Greengram, boiled	Legumes	0.76		KEN	x		
+Greengram, raw	Legumes	0.79		KEN	x		
+Kidney beans, dry, boiled	Legumes	0.79		KEN	x		
+Kidney beans, dry, raw	Legumes	0.75		KEN	x		
+Kidney beans, green, boiled	Legumes	0.7		KEN	x		
+Kidney beans, green, raw	Legumes	0.68		KEN	x		
+Lentils, green, small, boiled	Legumes	0.85		RC			
+Lentils, green, small, raw	Legumes	0.89		RC			
+Pigeon peas, boiled	Legumes	0.75		KEN	x		
+Pigeon peas, raw	Legumes	0.84		KEN	x		
+Soybean	Legumes	0.74		ASI	x		
+Soybean, flakes	Legumes	0.58		ASI	x		
+Soybean, hulls	Legumes	0.4		ASI	x		
+Soybean, meal	Legumes	0.64		ASI	x		
+Soybean, boiled	Legumes	0.79		KEN	x		
+Soybean, boiled with fat	Legumes	0.70		KEN	x		
+Cinnamon, powder	Herbes and spices	0.56		ASI	x		
+Clover, seed	Herbes and spices	0.77		ASI	x		
+Dry flavoring mix Roiko and other flavorings	Herbes and spices	0.7		KEN	x		
+Garlic, flakes	Herbes and spices	0.35		ASI	x		
+Garlic, powder	Herbes and spices	0.32		ASI	x		
+Sage, leaves	Herbes and spices	0.29		ASI	x		
+Spice, barbecue	Herbes and spices	0.48		ASI	x		
+Spice, blend	Herbes and spices	0.58		ASI	x		
+Prawns, whole, boiled, with shell	Fish and fish products	0.58		RC			
+Prawns, whole, boiled, without shell	Fish and fish products	0.77		RC			
+Egg, yoke, powder	Egg and egg products	0.37		ASI	x		
+Egg, chicken, boiled/poached	Egg and egg products	0.6		FNDDS 4.1			
+Eggs, powdered	Egg and egg products	0.35		ASI	x		
+Blood, flour	Meat and meat products	0.48		ASI	x		
+Blood, meal	Meat and meat products	0.62		ASI	x		
+Bone and meat meal, loose	Meat and meat products	0.72		ASI	x		
+Bone meal, loose	Meat and meat products	0.80-0.96		ASI	x		
+Cow intestine, boiled	Meat and meat products	0.58		KEN	x		
+Cow, lean, no bone, raw	Meat and meat products	0.96		KEN	x		
+Cow, intestine, raw	Meat and meat products	0.93		KEN	x		
+Goat, intestine, boiled	Meat and meat products	0.56		KEN	x		
+Goat, intestine, raw	Meat and meat products	0.83		KEN	x		
+Pork, fatty, with bone, boiled	Meat and meat products	0.63		KEN	x		
+Pork, fatty, with bone, raw	Meat and meat products	0.97		KEN	x		
+Pork, medium, with bone, boiled	Meat and meat products	0.7		KEN	x		
+Pork, medium, with bone, raw	Meat and meat products	0.93		KEN	x		
+Potato chips	Snacks	0.09		RC			
+Potato chips, pringles	Snacks	0.12		FNDDS 4.1			
+Snacks, puffed, lowfat	Snacks	0.11		FNDDS 4.1			
+Glucolin, glucose	Sweets	0.4		KEN	x		
+Glucose (at 15.6 C)	Sweets	1.395	1.35-1.44	CSG	x		
+Jam 	Sweets	1.333		S&W			
+Jam, sweetened	Sweets	1.43		RC			
+Jelly 	Sweets	1.245		S&W			
+Nutella	Sweets	1.26		RC			
+Sucrose	Sweets	0.85		ASI	x		
+Sucrose Octoacetate	Sweets	0.53		ASI	x		
+Sugar	Sweets	0.95		KEN	x		
+Sugar, dextrose	Sweets	0.62		ASI	x		
+Sugar, dextrose	Sweets	0.58		ASI	x		
+Sugar, granulated	Sweets	0.7		ASI	x		
+Sugar, powdered	Sweets	0.56		ASI	x		
+Sugar, white	Sweets	0.9		RC			
+Sugar, white	Sweets	0.88		FNDDS 4.1			
+Syrup, blackcurrant, undiluted	Sweets	1.28	1.280	UK 6th			
+Syrup, corn	Sweets	1.38		TB			
+Syrup, corn, light	Sweets	1.40	1.41	USDA	x		
+Syrup, fruit, blackberry	Sweets	1.34		RC			
+Syrup, grenadine	Sweets	1.18	1.18	CG	x		
+Syrup, maple	Sweets	1.32	1.32	USDA	x		
+Syrup, pancake 	Sweets	1.312		S&W			
+Baking powder	Miscellaneous foods	0.9		ASI	x		
+Gelatin	Miscellaneous foods	0.72		ASI	x		
+Monosodium glutamate	Miscellaneous foods	1.62		TB			
+Mustard powdered	Miscellaneous foods	0.26		ASI	x		
+Protein supplement	Miscellaneous foods	0.54		ASI	x		
+Salad dressing	Miscellaneous foods	1.1		FNDDS 4.1			
+Salt, sodium chloride	Miscellaneous foods	2.165		TB			
+Salt, fine table	Miscellaneous foods	1.38		ASI	x		
+Salt, granulated	Miscellaneous foods	1.28		ASI	x		
+Salt, table	Miscellaneous foods	1.217		S&W			
+Sauce, soy	Miscellaneous foods	1.12		FNDDS 4.1			
+Sodium bicarbonate	Miscellaneous foods	2.2		TB			
+Vitamin additive	Miscellaneous foods	0.66		ASI	x		
+Vitamin compound	Miscellaneous foods	0.67		ASI	x		
+Vitamin enrichment	Miscellaneous foods	0.64		ASI	x		
+Vitamin mix	Miscellaneous foods	0.7		ASI	x		
+Vitamin powder	Miscellaneous foods	0.56		ASI	x		
+Yeast	Miscellaneous foods	0.95		ASI	x		
+Bean soup	Soups	1.054		S&W			
+Cheddar cheese soup	Soups	1.046		S&W			
+Chicken noodle soup	Soups	1		S&W			
+Egg drop soup	Soups	1.017		S&W			
+Mushroom soup	Soups	1.017		S&W			
+Soup, meat	Soups	1.04		KEN	x		
+Soup, mixed	Soups	1.05		KEN	x		
+Soup, thick (squash, potato)	Soups	1.09		RC			
+Soup, vegetable	Soups	0.99		KEN	x		
+Tomato soup	Soups	1.017		S&W			
+Beef and noodles (no sauce)	Mixed dishes	0.65		S&W			
+Beef and noodles in gravy (mixture)	Mixed dishes	1.04		S&W			
+Beef stew, canned	Mixed dishes	1.05		S&W			
+Beef, noodles and vegetables (no sauce)	Mixed dishes	0.68		S&W			
+Broccoli casserole	Mixed dishes	0.95		S&W			
+Cheese tortellini	Mixed dishes	1.03		S&W			
+Chicken and dumplings (mixture)	Mixed dishes	1.04		S&W			
+Eggplant parmesan	Mixed dishes	0.83		S&W			
+Githeri (muthugo + beans) + meat	Mixed dishes	0.95		KEN	x		
+Githeri (muthugo + beans) + meat + vegetable + potato/banana	Mixed dishes	0.99		KEN	x		
+Githeri (muthugo + beans) + onion, boiled with fat	Mixed dishes	0.98		KEN	x		
+Githeri (muthugo + beans) + potato/banana	Mixed dishes	0.88		KEN	x		
+Githeri (muthugo + beans) + vegetable	Mixed dishes	1.04		KEN	x		
+Githeri (muthugo + beans) + vegetable + meat	Mixed dishes	0.94		KEN	x		
+Githeri + meat	Mixed dishes	0.75		KEN	x		
+Githeri + meat + vegetable + potato/banana	Mixed dishes	1.05		KEN	x		
+Githeri + onion, boiled with fat	Mixed dishes	0.83		KEN	x		
+Githeri + peas	Mixed dishes	1.04		KEN	x		
+Githeri + potato/banana	Mixed dishes	1.10		KEN	x		
+Githeri + roots + vegetable	Mixed dishes	1.13		KEN	x		
+Githeri + vegetable	Mixed dishes	1.30		KEN	x		
+Githeri + vegetable + meat	Mixed dishes	0.84		KEN	x		
+Githeri + vegetable + potato/banana	Mixed dishes	0.95		KEN	x		
+Githeri plain (muthugo + beans + water)	Mixed dishes	0.98		KEN	x		
+Githeri, beans + vegetable + potatoes	Mixed dishes	0.93		KEN	x		
+Githeri, maize + peas	Mixed dishes	0.97		KEN	x		
+Githeri, plain (maize + beans + water)	Mixed dishes	0.71		KEN	x		
+Gitwero, banana + beans	Mixed dishes	1.20		KEN	x		
+Gitwero, banana + beans + vegetable	Mixed dishes	1.20		KEN	x		
+Gitwero, banana + potato + beans	Mixed dishes	1.04		KEN	x		
+Gitwero, banana + vegetable	Mixed dishes	1.20		KEN	x		
+Gitwero, banana, boiled with fat	Mixed dishes	1.19		KEN	x		
+Gitwero, banana/potato	Mixed dishes	1.30		KEN	x		
+Gitwero, banana/potato + meat	Mixed dishes	1.08		KEN	x		
+Gitwero, banana/potato + vegetable	Mixed dishes	1.22		KEN	x		
+Gitwero, root (yam, arrowroot, etc.)	Mixed dishes	1.14		KEN	x		
+Gitwero, roots + banana	Mixed dishes	1.03		KEN	x		
+Gitwero, roots + banana	Mixed dishes	1.03		KEN	x		
+Green bean casserole	Mixed dishes	0.95		S&W			
+Lasagna	Mixed dishes	1.04		S&W			
+Macaroni and cheese, canned	Mixed dishes	1.00		S&W			
+Mataha (Maize stew) (Maize stew), maize + peas	Mixed dishes	0.86		KEN	x		
+Mataha (maize stew), beans + banana	Mixed dishes	1.22		KEN	x		
+Mataha (maize stew), beans + banana + potato	Mixed dishes	1.25		KEN	x		
+Mataha (maize stew), beans + banana + potato + vegetable	Mixed dishes	1.15		KEN	x		
+Mataha (maize stew), beans + potato/banana + vegetable	Mixed dishes	1.14		KEN	x		
+Mataha (maize stew), beans + vegetable	Mixed dishes	1.02		KEN	x		
+Mataha (maize stew), beans + vegetable + banana	Mixed dishes	1		KEN	x		
+Mataha (maize stew), maize + banana	Mixed dishes	1.09		KEN	x		
+Mataha (maize stew), maize + banana/potato + vegetable	Mixed dishes	1.10		KEN	x		
+Mataha (maize stew), maize + beans + potato	Mixed dishes	0.75		KEN	x		
+Mataha (maize stew), maize + beans + potato + vegetable	Mixed dishes	0.95		KEN	x		
+Mataha (maize stew), maize + beans + potato, boiled with fat	Mixed dishes	0.75		KEN	x		
+Mataha (maize stew), maize + beans + vegetable + banana	Mixed dishes	0.70		KEN	x		
+Mataha (maize stew), maize + vegetable	Mixed dishes	0.90		KEN	x		
+Mataha (maize stew), paw paw	Mixed dishes	1.33		KEN	x		
+Mexican casserole w/beef, beans, cheese, chips	Mixed dishes	0.6		S&W			
+Mini ravioli, canned	Mixed dishes	1.05		S&W			
+Moussaka	Mixed dishes	0.85		S&W			
+Muthugo (maize without germ and cover) only	Mixed dishes	0.76		KEN	x		
+Noodles/pasta with fat	Mixed dishes	0.80		KEN	x		
+Rice + beans	Mixed dishes	0.75		KEN	x		
+Rice + beans + potato/banana	Mixed dishes	0.85		KEN	x		
+Rice + meat	Mixed dishes	0.73		KEN	x		
+Rice + meat + vegetable	Mixed dishes	0.83		KEN	x		
+Rice + potato/banana	Mixed dishes	0.80		KEN	x		
+Rice + roots (yam, arrowroot etc.)	Mixed dishes	0.90		KEN	x		
+Rice + vegetable	Mixed dishes	0.65		KEN	x		
+Rice + vegetable + potato/banana	Mixed dishes	0.80		KEN	x		
+Rice, plain (rice + water)	Mixed dishes	0.70		KEN	x		
+Spaghetti and meat balls, canned	Mixed dishes	1.04		S&W			
+Stew, banana	Mixed dishes	1.07		KEN	x		
+Stew, banana + potato + vegetable	Mixed dishes	1.06		KEN	x		
+Stew, beans	Mixed dishes	1.01		KEN	x		
+Stew, beans/ peas + meat + vegetables	Mixed dishes	0.94		KEN	x		
+Stew, beans/ peas + vegetables	Mixed dishes	1.07		KEN	x		
+Stew, meat	Mixed dishes	1.12		KEN	x		
+Stew, pea + potato/banana	Mixed dishes	1.10		KEN	x		
+Stew, pea + potato/banana + vegetable	Mixed dishes	1.22		KEN	x		
+Stew, potato	Mixed dishes	1.10		KEN	x		
+Stew, potato + beans + vegetable	Mixed dishes	1.08		KEN	x		
+Stew, vegetable	Mixed dishes	0.68		KEN	x		
+Stew, vegetable + meat	Mixed dishes	0.86		KEN	x		
+Stew, vegetable + potato	Mixed dishes	1.10		KEN	x		
+Stew, vegetable + potato + meat	Mixed dishes	1.08		KEN	x		
+Stew: eggs + veg	Mixed dishes	0.68		KEN	x		
+Tuna noodle casserole	Mixed dishes	0.93		S&W			
+Ugali + beans	Mixed dishes	0.80		KEN	x		
+Ugali + beans + vegetable	Mixed dishes	0.80		KEN	x		
+Ugali + vegetable, crumbed	Mixed dishes	0.75		KEN	x		
+Ugali + vegetables, boiled with fat	Mixed dishes	1.20		KEN	x		
+Ugali, plain (flour + water), crumbed	Mixed dishes	0.75		KEN	x		
+Wieners and sauerkraut (mixture)	Mixed dishes	0.61		S&W			
+Zesty Italian ‘‘hamburger helper’’	Mixed dishes	1.04		S&W			
+oregano, ground	Herbes and spices	0.29		ADDED	x		
+fennel, ground	Herbes and spices	0.35		ADDED	x		

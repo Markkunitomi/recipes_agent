@@ -12,17 +12,17 @@ from .usda_api import USDAFoodAPI
 class DensityLookup:
     """Utility for looking up ingredient densities and performing conversions."""
     
-    def __init__(self, densities_file: str = None, use_usda_api: bool = True):
+    def __init__(self, densities_file: str = None, use_usda_api: bool = True, usda_timeout: int = 30):
         """Initialize with densities database."""
         if densities_file is None:
-            densities_file = Path(__file__).parent.parent / "data" / "ingredient" / "densities_cleaned.tsv"
+            densities_file = Path(__file__).parent.parent.parent / "data" / "ingredient" / "densities_cleaned.tsv"
         
         self.logger = logging.getLogger(__name__)
         self.densities_df = self._load_densities(densities_file)
         self._build_search_index()
         
-        # Initialize USDA API for fallback lookups
-        self.usda_api = USDAFoodAPI() if use_usda_api else None
+        # Initialize USDA API for fallback lookups with configurable timeout
+        self.usda_api = USDAFoodAPI(timeout=usda_timeout) if use_usda_api else None
         self.usda_cache = {}  # Cache USDA results locally
         
     def _load_densities(self, file_path: Path) -> pd.DataFrame:

@@ -5,13 +5,13 @@ from typing import Dict, Any, List, Optional
 import re
 from ingredient_parser import parse_ingredient
 
-from agents.base import BaseAgent, AgentResult
-from agents.llm_integration import LLMManager
+from ..agents.base import BaseAgent, AgentResult
+from ..agents.llm_integration import LLMManager
 from config.settings import Settings
-from models.recipe import Recipe, Ingredient, InstructionStep, ParsedIngredient, NutritionInfo
-from models.recipe import DifficultyLevel, CuisineType
-from models.conversion import smart_round
-from utils.density_lookup import DensityLookup
+from ..models.recipe import Recipe, Ingredient, InstructionStep, ParsedIngredient, NutritionInfo
+from ..models.recipe import DifficultyLevel, CuisineType
+from ..models.conversion import smart_round
+from ..utils.density_lookup import DensityLookup
 
 class ParserAgent(BaseAgent):
     """Agent responsible for parsing and structuring recipe data."""
@@ -19,7 +19,7 @@ class ParserAgent(BaseAgent):
     def __init__(self, settings: Settings):
         super().__init__(settings)
         self.llm_manager = LLMManager(settings)
-        self.density_lookup = DensityLookup()
+        self.density_lookup = DensityLookup(usda_timeout=settings.processing.usda_api_timeout)
         self.difficulty_keywords = {
             'easy': ['easy', 'simple', 'quick', 'beginner', 'basic'],
             'medium': ['medium', 'intermediate', 'moderate'],
@@ -38,7 +38,7 @@ class ParserAgent(BaseAgent):
             AgentResult with parsed Recipe object
         """
         try:
-            self.logger.info(f"Parsing recipe: {raw_data.get('title', 'Unknown')}")
+            self.logger.info(f"**PARSING** - Parsing recipe: {raw_data.get('title', 'Unknown')}")
             
             # Parse ingredients
             ingredients = self._parse_ingredients(raw_data.get('ingredients', []))
@@ -89,7 +89,7 @@ class ParserAgent(BaseAgent):
                 confidence_score=self._calculate_confidence_score(ingredients, instructions)
             )
             
-            self.logger.info(f"Successfully parsed recipe with {len(ingredients)} ingredients and {len(instructions)} steps")
+            self.logger.info(f"**PARSING** - Successfully parsed recipe with {len(ingredients)} ingredients and {len(instructions)} steps")
             
             return AgentResult(
                 success=True,
@@ -158,10 +158,32 @@ class ParserAgent(BaseAgent):
         """Parse instruction strings into structured InstructionStep objects."""
         instructions = []
         
-        for i, instruction_text in enumerate(raw_instructions):
-            if not instruction_text or not instruction_text.strip():
+        # Handle case where raw_instructions might be a single string
+        if isinstance(raw_instructions, str):
+            # Split by common separators if it's a single string
+            raw_instructions = re.split(r'(?:\n|\.(?:\s|$)|\d+\.|\s+\*\s+)', raw_instructions)
+            raw_instructions = [inst.strip() for inst in raw_instructions if inst.strip()]
+        
+        # Filter out single character or very short "instructions"
+        valid_instructions = []
+        for instruction in raw_instructions:
+            if not instruction or not instruction.strip():
                 continue
-            
+            instruction = instruction.strip()
+            # Skip single characters, punctuation, or very short text
+            if len(instruction) <= 2 or instruction in ['.', ',', ';', ':', '!', '?']:
+                continue
+            # Skip if it looks like a single word or number
+            if len(instruction.split()) == 1 and len(instruction) < 10:
+                continue
+            valid_instructions.append(instruction)
+        
+        # Limit to reasonable number of steps
+        if len(valid_instructions) > 25:
+            self.logger.warning(f"Recipe has {len(valid_instructions)} steps, limiting to 25")
+            valid_instructions = valid_instructions[:25]
+        
+        for i, instruction_text in enumerate(valid_instructions):
             try:
                 # Use LLM to enhance instruction parsing
                 enhanced_instruction = self._enhance_instruction_with_llm(instruction_text)

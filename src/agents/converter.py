@@ -2,10 +2,10 @@
 Converter Agent - Handles unit conversions for recipes
 """
 from typing import Dict, Any, List, Optional, Union
-from models.recipe import Recipe, Ingredient
-from models.conversion import UnitConverter, ConversionRequest, ConversionResult
-from agents.base import BaseAgent, AgentResult
-from agents.llm_integration import LLMManager
+from ..models.recipe import Recipe, Ingredient
+from ..models.conversion import UnitConverter, ConversionRequest, ConversionResult
+from ..agents.base import BaseAgent, AgentResult
+from ..agents.llm_integration import LLMManager
 from config.settings import Settings
 
 class ConverterAgent(BaseAgent):
@@ -29,7 +29,7 @@ class ConverterAgent(BaseAgent):
             AgentResult with converted Recipe object
         """
         try:
-            self.logger.info(f"Converting recipe units: {recipe.title}")
+            self.logger.info(f"**CONVERTING** - Converting recipe units: {recipe.title}")
             
             # Determine target system
             if target_system == "preferred":

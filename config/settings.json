@@ -33,7 +33,7 @@
   },
   "output": {
     "output_dir": "./output",
-    "templates_dir": "./templates",
+    "templates_dir": "./src/outputs/templates",
     "html_template": "strangetom_style.html",
     "include_nutrition": true,
     "include_metadata": true,

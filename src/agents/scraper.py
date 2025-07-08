@@ -20,7 +20,7 @@ except ImportError:
         class RecipeScrapersException(Exception):
             pass
 
-from agents.base import BaseAgent, AgentResult
+from ..agents.base import BaseAgent, AgentResult
 from config.settings import Settings
 
 class ScrapeResult:
@@ -44,14 +44,8 @@ class ScraperAgent(BaseAgent):
         """Create requests session with retry strategy."""
         session = requests.Session()
         
-        # Configure retry strategy
-        retry_strategy = Retry(
-            total=self.settings.scraping.max_retries,
-            backoff_factor=self.settings.scraping.retry_delay,
-            status_forcelist=[429, 500, 502, 503, 504],
-        )
-        
-        adapter = HTTPAdapter(max_retries=retry_strategy)
+        # No retry strategy - single attempt only
+        adapter = HTTPAdapter(max_retries=0)
         session.mount("http://", adapter)
         session.mount("https://", adapter)
         
@@ -86,7 +80,7 @@ class ScraperAgent(BaseAgent):
             AgentResult with scraped recipe data
         """
         try:
-            self.logger.info(f"Scraping recipe from: {url}")
+            self.logger.info(f"**SCRAPING** - Scraping recipe from: {url}")
             
             # Validate URL
             if not self._is_valid_url(url):
@@ -106,7 +100,7 @@ class ScraperAgent(BaseAgent):
             recipe_data = self._scrape_with_library(url)
             
             if recipe_data:
-                self.logger.info(f"Successfully scraped recipe: {recipe_data.get('title', 'Unknown')}")
+                self.logger.info(f"**SCRAPING** - Successfully scraped recipe: {recipe_data.get('title', 'Unknown')}")
                 return AgentResult(
                     success=True,
                     data=recipe_data,

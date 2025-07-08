@@ -8,8 +8,8 @@ from datetime import datetime
 from jinja2 import Environment, FileSystemLoader, Template
 import json
 
-from models.recipe import Recipe
-from agents.base import BaseAgent, AgentResult
+from ..models.recipe import Recipe
+from ..agents.base import BaseAgent, AgentResult
 from config.settings import Settings
 
 class RenderResult:
@@ -61,7 +61,7 @@ class RendererAgent(BaseAgent):
             AgentResult with RenderResult
         """
         try:
-            self.logger.info(f"Rendering recipe '{recipe.title}' to {format_type}")
+            self.logger.info(f"**RENDERING** - Rendering recipe '{recipe.title}' to {format_type}")
             
             output_base = output_dir or self.output_dir
             
@@ -84,7 +84,7 @@ class RendererAgent(BaseAgent):
                 )
             
             if result.success:
-                self.logger.info(f"Successfully rendered to: {result.output_path}")
+                self.logger.info(f"**RENDERING** - Successfully rendered to: {result.output_path}")
                 return AgentResult(
                     success=True,
                     data=result,
@@ -218,13 +218,32 @@ class RendererAgent(BaseAgent):
                     if ingredient.get('weight_quantity') is not None:
                         ingredient['weight_quantity'] = int(round(ingredient['weight_quantity']))
             
+            # Download and reference local image
+            images_dir = output_dir / "image"
+            images_dir.mkdir(parents=True, exist_ok=True)
+            
+            if recipe.image_url:
+                try:
+                    # Download image and get local filename
+                    local_image_filename = self._ensure_recipe_image(recipe, images_dir)
+                    # Update JSON to reference local image file instead of URL
+                    recipe_dict['image_url'] = f"./image/{local_image_filename}"
+                    recipe_dict['original_image_url'] = recipe.image_url  # Keep original for reference
+                except Exception as e:
+                    self.logger.warning(f"Failed to download image for {recipe.title}: {e}")
+                    # Keep original URL if download fails
+            
             # Add rendering metadata
             recipe_dict['rendered_at'] = datetime.now().isoformat()
             recipe_dict['format_version'] = "1.0"
             
+            # Ensure JSON directory exists
+            json_dir = output_dir / "json"
+            json_dir.mkdir(parents=True, exist_ok=True)
+            
             # Save to file
             safe_title = self._make_safe_filename(recipe.title)
-            output_path = output_dir / "json" / f"{safe_title}.json"
+            output_path = json_dir / f"{safe_title}.json"
             
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(recipe_dict, f, indent=2, ensure_ascii=False, default=str)
@@ -275,6 +294,9 @@ class RendererAgent(BaseAgent):
             safe_title = self._make_safe_filename(recipe.title)
             output_path = output_dir / "html" / f"{safe_title}-strangetom.html"
             
+            # Ensure the html subdirectory exists
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            
             with open(output_path, 'w', encoding='utf-8') as f:
                 f.write(html_content)
             
@@ -323,7 +345,10 @@ class RendererAgent(BaseAgent):
             # Process instructions with filters
             processed_instructions = []
             for instruction in recipe.instructions:
-                instruction_text = str(instruction)
+                if hasattr(instruction, 'instruction'):
+                    instruction_text = instruction.instruction
+                else:
+                    instruction_text = str(instruction)
                 instruction_text = replace_timers(instruction_text)
                 instruction_text = add_ingredient_tooltips(instruction_text)
                 processed_instructions.append(instruction_text)
@@ -360,188 +385,102 @@ class RendererAgent(BaseAgent):
             return RenderResult(None, "interactive", False, str(e))
     
     def _render_cookbook(self, recipe: Recipe, output_dir: Path) -> RenderResult:
-        """Render recipe to cookbook-style LaTeX format."""
+        """Render recipe to cookbook-style LaTeX format (itakurah format)."""
         try:
             # Load cookbook template
             template = self.jinja_env.get_template("cookbook_recipe.tex")
             
-            # Add custom filters
-            def format_quantity(value):
-                if value is None or value == 0:
-                    return ""
-                if isinstance(value, (int, float)):
-                    # Always use integer if it's a whole number
-                    if value == int(value):
-                        return str(int(value))
-                    # Use fractions for common cooking fractions
-                    if value < 1:
-                        return self._decimal_to_fraction(value)
-                    # For mixed numbers (e.g., 1.5 → 1 1/2)
-                    elif value < 10 and value != int(value):
-                        whole = int(value)
-                        frac_part = value - whole
-                        if frac_part > 0:
-                            frac_str = self._decimal_to_fraction(frac_part)
-                            return f"{whole} {frac_str}" if whole > 0 else frac_str
-                        return str(whole)
-                    else:
-                        # For larger numbers, round to 1 decimal
-                        return f"{value:.1f}".rstrip('0').rstrip('.')
-                return str(value)
-
-            def escape_latex(text):
-                if not text:
-                    return ""
-                return self._escape_latex(str(text))
-            
-            self.jinja_env.filters['format_quantity'] = format_quantity
-            self.jinja_env.filters['escape_latex'] = escape_latex
-            
-            # Prepare escaped content
-            escaped_title = self._escape_latex(recipe.title)
-            escaped_ingredients = []
+            # Format ingredients according to itakurah style
+            formatted_ingredients = []
             for ingredient in recipe.ingredients:
-                ing_parts = []
-                # Handle quantity with better formatting
+                parts = []
+                
+                # Quantity - use smart formatting
                 if ingredient.quantity is not None and ingredient.quantity > 0:
-                    ing_parts.append(format_quantity(ingredient.quantity))
-                elif ingredient.quantity is None and ingredient.unit:
-                    # Try to extract quantity from original text if available
-                    if hasattr(ingredient, 'original_text') and ingredient.original_text:
-                        import re
-                        qty_match = re.search(r'(\d+(?:\.\d+)?)\+?\s*' + re.escape(ingredient.unit), ingredient.original_text)
-                        if qty_match:
-                            ing_parts.append(qty_match.group(1))
-                        else:
-                            ing_parts.append("1")  # Default fallback quantity
-                # Handle unit
+                    qty = ingredient.quantity
+                    formatted_qty = self._format_quantity_for_display(qty)
+                    parts.append(formatted_qty)
+                
+                # Unit
                 if ingredient.unit:
-                    ing_parts.append(self._escape_latex(ingredient.unit))
-                # Handle name (always present)
-                ing_parts.append(self._escape_latex(ingredient.name))
-                # Handle preparation
+                    parts.append(ingredient.unit)
+                
+                # Name
+                parts.append(ingredient.name)
+                
+                # Preparation in parentheses
                 if ingredient.preparation:
-                    ing_parts.append(f"({self._escape_latex(ingredient.preparation)})")
+                    parts.append(f"({ingredient.preparation})")
                 
-                # Join parts with appropriate spacing
-                escaped_ingredients.append(" ".join(filter(None, ing_parts)))
+                # Join with spaces and escape for LaTeX
+                ingredient_str = " ".join(parts)
+                formatted_ingredients.append(self._escape_latex(ingredient_str))
             
-            escaped_instructions = []
-            # Handle case where instructions are broken into individual characters
-            if len(recipe.instructions) > 50:  # Too many steps, likely character-by-character
-                # Combine all instruction text into a single paragraph
-                combined_text = ""
-                for inst in recipe.instructions:
-                    if hasattr(inst, 'instruction'):
-                        combined_text += inst.instruction
-                    else:
-                        combined_text += str(inst)
-                
-                # Split into sentences and create proper steps
-                import re
-                # First, try to identify where words should be separated
-                # Look for common patterns where words run together
-                text_with_spaces = combined_text
-                
-                # Add spaces between lowercase and uppercase letters
-                text_with_spaces = re.sub(r'([a-z])([A-Z])', r'\1 \2', text_with_spaces)
-                # Add spaces at sentence boundaries
-                text_with_spaces = re.sub(r'([.!?])([A-Z])', r'\1 \2', text_with_spaces)
-                # Add spaces between words and numbers
-                text_with_spaces = re.sub(r'([a-z])([0-9])', r'\1 \2', text_with_spaces)
-                text_with_spaces = re.sub(r'([0-9])([a-zA-Z])', r'\1 \2', text_with_spaces)
-                
-                # More aggressive word boundary detection
-                # Add spaces before common cooking words
-                cooking_words = ['the', 'and', 'with', 'into', 'over', 'until', 'then', 'flour', 'bowl', 'well', 'centre', 'back', 'spoon', 'break', 'egg', 'pour', 'half', 'milk', 'whisk', 'together', 'gradually', 'incorporating', 'make', 'smooth', 'thick', 'batter', 'beat', 'thoroughly', 'remove', 'lumps', 'stir', 'rest', 'heat', 'little', 'oil', 'butter', 'medium', 'frying', 'pan', 'tip', 'excess', 'about', 'tablespoons', 'tilt', 'thinly', 'coats', 'base', 'cook', 'moderate', 'seconds', 'minute', 'golden', 'brown', 'underside', 'flip', 'pancake', 'palette', 'knife', 'other', 'side', 'slide', 'out', 'onto', 'plate', 'more', 'remaining', 'pancakes', 'one', 'at', 'time', 'same', 'way', 'preparing', 'advance', 'stack', 'reheat', 'microwave', 'alternatively', 'oven', 'wrap', 'foil', 'warm', 'them', 'through', 'minutes']
-                for word in cooking_words:
-                    # Add space before the word if it's preceded by a letter
-                    text_with_spaces = re.sub(rf'([a-z]){word}', rf'\1 {word}', text_with_spaces, flags=re.IGNORECASE)
-                    # Add space after the word if it's followed by a letter
-                    text_with_spaces = re.sub(rf'{word}([a-z])', rf'{word} \1', text_with_spaces, flags=re.IGNORECASE)
-                
-                # Fix common split word issues
-                word_fixes = {
-                    'b at ter': 'batter',
-                    'the n': 'then',
-                    'ab out': 'about',
-                    'table spoon': 'tablespoon',
-                    'table spoons': 'tablespoons',
-                    'pan cake': 'pancake',
-                    'pan cakes': 'pancakes',
-                    'o the r': 'other',
-                    'under side': 'underside',
-                    'pl at e': 'plate',
-                    'at ime': 'a time',
-                    'moder at e': 'moderate',
-                    'he at': 'heat',
-                    'minute s': 'minutes',
-                    'altern at ively': 'alternatively',
-                    'co at s': 'coats',
-                    'asyou': 'as you',
-                    'toge the r': 'together',
-                    'incorpor at ing': 'incorporating',
-                    'tilt ing': 'tilting',
-                    'ofa': 'of a',
-                    'ina': 'in a',
-                    'itis': 'it is',
-                    'sinf oil': 's in foil',
-                    'the m': 'them',
-                    'themilk': 'the milk',
-                    'timein': 'time in',
-                    'themicrowave': 'the microwave',
-                    'apinchofsalt': 'a pinch of salt',
-                    'be at': 'beat',
-                    'Re heat': 'Reheat',
-                    'tablespoon sof': 'tablespoons of',
-                    'Altern at ively': 'Alternatively'
-                }
-                
-                for wrong, correct in word_fixes.items():
-                    text_with_spaces = text_with_spaces.replace(wrong, correct)
-                
-                # Clean up multiple spaces
-                text_with_spaces = re.sub(r'\s+', ' ', text_with_spaces)
-                
-                sentences = re.split(r'[.!?]+', text_with_spaces)
-                for sentence in sentences:
-                    sentence = sentence.strip()
-                    # Filter out non-instructional content
-                    if (sentence and len(sentence) > 10 and 
-                        not sentence.lower().startswith(('yum', 'honestly', 'but honestly')) and
-                        not sentence.upper() == sentence):  # Skip all-caps expressions
-                        escaped_instructions.append(self._escape_latex(sentence + "."))
-            else:
-                # Normal case - process instructions normally
-                for inst in recipe.instructions:
-                    if hasattr(inst, 'instruction'):
-                        # It's an instruction object
-                        escaped_instructions.append(self._escape_latex(inst.instruction))
-                    else:
-                        # It's a string
-                        escaped_instructions.append(self._escape_latex(str(inst)))
+            # Format instructions according to itakurah style
+            formatted_instructions = []
+            for instruction in recipe.instructions:
+                if hasattr(instruction, 'instruction'):
+                    text = instruction.instruction
+                else:
+                    text = str(instruction)
+                formatted_instructions.append(self._escape_latex(text))
+            
+            # Prepare template variables
+            escaped_title = self._escape_latex(recipe.title)
+            
+            # Format servings display
+            servings_display = str(recipe.servings) if recipe.servings else "4"
+            
+            # Format time displays
+            prep_time_display = f"{recipe.prep_time} MIN" if recipe.prep_time else "15 MIN"
+            cook_time_display = f"{recipe.cook_time} MIN" if recipe.cook_time else "30 MIN"
+            
+            # Generate image path (following itakurah naming convention)
+            safe_name = recipe.title.lower()
+            safe_name = safe_name.replace(' ', '').replace(',', '').replace('&', 'and').replace("'", '')
+            safe_name = ''.join(c for c in safe_name if c.isalnum())
+            image_path = f"./images/{safe_name}.jpg"
             
             # Prepare template context
             context = {
-                'recipe': recipe,
-                'generated_date': datetime.now().strftime("%Y-%m-%d"),
-                'prep_time_formatted': self._format_time(recipe.prep_time),
-                'cook_time_formatted': self._format_time(recipe.cook_time),
-                'total_time_formatted': self._format_time(recipe.total_time),
                 'escaped_title': escaped_title,
-                'escaped_ingredients': escaped_ingredients,
-                'escaped_instructions': escaped_instructions
+                'servings_display': servings_display,
+                'prep_time_display': prep_time_display,
+                'cook_time_display': cook_time_display,
+                'image_path': image_path,
+                'formatted_ingredients': formatted_ingredients,
+                'formatted_instructions': formatted_instructions
             }
             
             # Render template
             latex_content = template.render(**context)
             
-            # Save to file
+            # Create cookbook directory structure
+            cookbook_dir = output_dir / "cookbook"
+            recipes_dir = cookbook_dir / "recipes"
+            images_dir = cookbook_dir / "images"
+            
+            recipes_dir.mkdir(parents=True, exist_ok=True)
+            images_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Generate or download placeholder image
+            image_filename = self._ensure_recipe_image(recipe, images_dir)
+            
+            # Update image path in context to match actual generated file
+            context['image_path'] = f"./images/{image_filename}"
+            
+            # Re-render template with updated image path
+            latex_content = template.render(**context)
+            
+            # Save recipe file to cookbook/recipes/
             safe_title = self._make_safe_filename(recipe.title)
-            output_path = output_dir / "latex" / f"{safe_title}-cookbook.tex"
+            output_path = recipes_dir / f"{safe_title}.tex"
             
             with open(output_path, 'w', encoding='utf-8') as f:
                 f.write(latex_content)
+            
+            # Copy or create necessary cookbook files
+            self._setup_cookbook_files(cookbook_dir)
             
             return RenderResult(output_path, "cookbook", True)
             
@@ -916,6 +855,32 @@ class RendererAgent(BaseAgent):
         if not text:
             return ""
         
+        # First handle HTML entities that might be in the text
+        html_entities = {
+            '&amp;': '&',
+            '&lt;': '<',
+            '&gt;': '>',
+            '&quot;': '"',
+            '&#39;': "'",
+            '&####39;': "'",  # Sometimes appears as malformed entity
+            '&#x27;': "'",
+            '&apos;': "'",
+            '&nbsp;': ' ',
+            '&ndash;': '-',
+            '&mdash;': '--',
+            '&hellip;': '...'
+        }
+        
+        escaped = text
+        for entity, replacement in html_entities.items():
+            escaped = escaped.replace(entity, replacement)
+        
+        # Handle remaining numeric HTML entities with regex
+        import re
+        # Match &#number; patterns (like &#39; or &#x27;)
+        escaped = re.sub(r'&#(\d+);', lambda m: chr(int(m.group(1))), escaped)
+        escaped = re.sub(r'&#x([0-9a-fA-F]+);', lambda m: chr(int(m.group(1), 16)), escaped)
+        
         # LaTeX special characters
         latex_chars = {
             '&': r'\&',
@@ -930,7 +895,6 @@ class RendererAgent(BaseAgent):
             '\\': r'\textbackslash{}',
         }
         
-        escaped = text
         for char, replacement in latex_chars.items():
             escaped = escaped.replace(char, replacement)
         
@@ -961,6 +925,13 @@ class RendererAgent(BaseAgent):
             return f"{decimal:.1f}".rstrip('0').rstrip('.')
             
         return f"{frac.numerator}/{frac.denominator}"
+    
+    def _format_quantity_for_display(self, quantity: float) -> str:
+        """Format quantity for HTML display with proper fractions."""
+        if quantity == int(quantity):
+            return str(int(quantity))
+        else:
+            return self._decimal_to_fraction(quantity)
     
     def render_multiple(self, recipes: List[Recipe], format_type: str, output_dir: Optional[Path] = None) -> AgentResult[List[RenderResult]]:
         """Render multiple recipes to specified format."""
@@ -1055,6 +1026,465 @@ class RendererAgent(BaseAgent):
             tags.extend([tag.lower() for tag in recipe.dietary_tags])
         
         return list(set(tags))  # Remove duplicates
+    
+    def _ensure_recipe_image(self, recipe: Recipe, images_dir: Path) -> str:
+        """Ensure recipe has an image, generate placeholder if needed."""
+        # Generate safe filename for image
+        safe_name = recipe.title.lower()
+        safe_name = safe_name.replace(' ', '').replace(',', '').replace('&', 'and').replace("'", '')
+        safe_name = ''.join(c for c in safe_name if c.isalnum())
+        image_filename = f"{safe_name}.jpg"
+        image_path = images_dir / image_filename
+        
+        # If image already exists, use it
+        if image_path.exists():
+            return image_filename
+        
+        # Try to download from recipe URL if available
+        if recipe.image_url:
+            try:
+                import requests
+                from PIL import Image
+                import io
+                
+                response = requests.get(recipe.image_url, timeout=10)
+                response.raise_for_status()
+                
+                # Convert to PIL Image and save as JPEG
+                img = Image.open(io.BytesIO(response.content))
+                img = img.convert('RGB')  # Ensure RGB for JPEG
+                img.save(image_path, 'JPEG', quality=85)
+                
+                self.logger.info(f"Downloaded recipe image: {image_filename}")
+                return image_filename
+                
+            except Exception as e:
+                self.logger.warning(f"Failed to download image from {recipe.image_url}: {e}")
+        
+        # Generate placeholder image
+        return self._generate_placeholder_image(recipe, images_dir, image_filename)
+    
+    def _generate_placeholder_image(self, recipe: Recipe, images_dir: Path, filename: str) -> str:
+        """Generate a placeholder image for the recipe. Prioritize local generation over unreliable external services."""
+        # First, try local placeholder generation (more reliable)
+        self.logger.info(f"Generating local placeholder image for: {recipe.title}")
+        local_result = self._generate_local_placeholder_image(recipe, images_dir, filename)
+        
+        # If local generation succeeded, return it
+        if local_result == filename:  # Success returns the original filename
+            return local_result
+        
+        # If local generation failed, try external sources as backup
+        try:
+            import requests
+            from urllib.parse import quote
+            
+            # Extract main food item from recipe for search
+            food_keywords = self._extract_food_keywords(recipe)
+            search_query = f"{food_keywords} food dish"
+            
+            # Try different food-specific image sources with multiple search strategies
+            # Encode search terms properly for URLs
+            encoded_keywords = quote(food_keywords.encode('utf-8'))
+            encoded_query = quote(search_query.encode('utf-8'))
+            encoded_title = quote(' '.join(recipe.title.split()[:2]).encode('utf-8'))
+            
+            image_sources = [
+                # Unsplash with specific food queries
+                f"https://source.unsplash.com/600x400/?{encoded_keywords}",
+                f"https://source.unsplash.com/600x400/?{encoded_query}",
+                f"https://source.unsplash.com/600x400/?food,{encoded_keywords}",
+                # Lorem Flickr with food focus
+                f"https://loremflickr.com/600/400/{encoded_keywords},food",
+                f"https://loremflickr.com/600/400/{encoded_query}",
+                # Fallback to recipe title
+                f"https://source.unsplash.com/600x400/?{encoded_title}",
+            ]
+            
+            for source_url in image_sources:
+                try:
+                    self.logger.info(f"Trying external image source with keywords '{food_keywords}' from {source_url}")
+                    response = requests.get(source_url, timeout=5, stream=True)  # Reduced timeout
+                    response.raise_for_status()
+                    
+                    # Check if we got an actual image (not an error page)
+                    if response.headers.get('content-type', '').startswith('image/'):
+                        # Save the image
+                        image_path = images_dir / filename
+                        with open(image_path, 'wb') as f:
+                            for chunk in response.iter_content(chunk_size=8192):
+                                f.write(chunk)
+                        
+                        self.logger.info(f"Downloaded external placeholder image: {filename}")
+                        return filename
+                    
+                except Exception as e:
+                    self.logger.debug(f"External image source failed {source_url}: {e}")
+                    continue
+            
+            # All external sources failed - this is fine, we prioritize local generation
+            self.logger.info("External image sources unavailable, using local placeholder")
+                
+        except Exception as e:
+            self.logger.debug(f"External image download failed: {e}")
+        
+        # Return the local result (even if it was a txt fallback)
+        return local_result
+    
+    def _extract_food_keywords(self, recipe: Recipe) -> str:
+        """Extract main food keywords from recipe for image search."""
+        import re
+        
+        # Remove common recipe words and keep main food items
+        common_words = {
+            'recipe', 'easy', 'best', 'homemade', 'simple', 'quick', 'perfect',
+            'delicious', 'amazing', 'ultimate', 'classic', 'traditional', 'authentic',
+            'healthy', 'low', 'fat', 'gluten', 'free', 'vegan', 'vegetarian',
+            'how', 'to', 'make', 'bake', 'cook', 'prepare', 'with', 'and', 'or',
+            'the', 'a', 'an', 'for', 'in', 'on', 'of', 'style', 'minute', 'hour',
+            'from', 'using', 'scratch', 'step', 'by', 'home', 'made'
+        }
+        
+        # Food-specific keywords to prioritize
+        food_categories = {
+            'proteins': ['chicken', 'beef', 'pork', 'fish', 'salmon', 'tuna', 'turkey', 'lamb', 'shrimp', 'crab', 'eggs'],
+            'vegetables': ['tomato', 'potato', 'onion', 'carrot', 'broccoli', 'spinach', 'mushroom', 'pepper', 'eggplant'],
+            'grains': ['pasta', 'rice', 'bread', 'noodles', 'quinoa', 'oats', 'flour'],
+            'dairy': ['cheese', 'milk', 'butter', 'cream', 'yogurt'],
+            'desserts': ['cake', 'cookie', 'pie', 'chocolate', 'vanilla', 'strawberry', 'banana', 'apple'],
+            'dishes': ['soup', 'salad', 'sandwich', 'pizza', 'burger', 'taco', 'curry', 'stir-fry', 'pancakes']
+        }
+        
+        # Extract words from title
+        title_words = re.findall(r'\b\w+\b', recipe.title.lower())
+        title_keywords = [word for word in title_words if word not in common_words and len(word) > 2]
+        
+        # Extract main ingredients (first 3)
+        ingredient_keywords = []
+        if recipe.ingredients:
+            for ingredient in recipe.ingredients[:3]:
+                name_words = re.findall(r'\b\w+\b', ingredient.name.lower())
+                ingredient_keywords.extend([word for word in name_words if word not in common_words and len(word) > 2])
+        
+        # Combine and prioritize keywords
+        all_keywords = title_keywords + ingredient_keywords[:3]  # Limit to avoid too many keywords
+        
+        # Prioritize food category words
+        prioritized_keywords = []
+        for keyword in all_keywords:
+            for category, words in food_categories.items():
+                if keyword in words:
+                    prioritized_keywords.insert(0, keyword)  # Add to front
+                    break
+            else:
+                prioritized_keywords.append(keyword)
+        
+        # Remove duplicates while preserving order
+        unique_keywords = []
+        for keyword in prioritized_keywords:
+            if keyword not in unique_keywords:
+                unique_keywords.append(keyword)
+        
+        # Take top 3 keywords
+        final_keywords = unique_keywords[:3]
+        
+        return ' '.join(final_keywords) if final_keywords else recipe.title.split()[0]
+    
+    def _generate_local_placeholder_image(self, recipe: Recipe, images_dir: Path, filename: str) -> str:
+        """Generate a local placeholder image for the recipe."""
+        try:
+            from PIL import Image, ImageDraw, ImageFont
+            import textwrap
+            
+            # Ensure images directory exists
+            images_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Create a 600x400 image with a nice gradient background
+            width, height = 600, 400
+            img = Image.new('RGB', (width, height), '#f5f5f5')
+            draw = ImageDraw.Draw(img)
+            
+            # Create gradient background
+            for y in range(height):
+                color_value = int(245 - (y / height) * 30)  # Subtle gradient
+                draw.line([(0, y), (width, y)], fill=(color_value, color_value, color_value))
+            
+            # Try to load fonts with multiple fallback options
+            font_large = None
+            font_small = None
+            
+            # Try different font paths for better compatibility
+            font_paths = [
+                "Arial.ttf",  # Windows
+                "/System/Library/Fonts/Arial.ttf",  # macOS
+                "/System/Library/Fonts/Helvetica.ttc",  # macOS alternative
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",  # Linux
+                "/usr/share/fonts/TTF/arial.ttf",  # Some Linux distros
+            ]
+            
+            for font_path in font_paths:
+                try:
+                    font_large = ImageFont.truetype(font_path, 36)
+                    font_small = ImageFont.truetype(font_path, 20)
+                    break
+                except:
+                    continue
+            
+            # Final fallback to default font
+            if not font_large:
+                font_large = ImageFont.load_default()
+                font_small = ImageFont.load_default()
+            
+            # Add recipe title (wrapped)
+            title = recipe.title if recipe.title else "Recipe"
+            wrapped_title = textwrap.fill(title, width=20)  # Wrap long titles
+            
+            # Calculate text size and position
+            lines = wrapped_title.split('\n')
+            total_height = len(lines) * 40
+            start_y = max(50, (height - total_height) // 2 - 40)  # Ensure positive position
+            
+            # Draw title with error handling
+            for i, line in enumerate(lines):
+                try:
+                    bbox = draw.textbbox((0, 0), line, font=font_large)
+                    text_width = bbox[2] - bbox[0]
+                    x = max(10, (width - text_width) // 2)  # Ensure positive position
+                    y = start_y + i * 40
+                    draw.text((x, y), line, fill='#333333', font=font_large)
+                except:
+                    # Fallback for older PIL versions or font issues
+                    x = 50
+                    y = start_y + i * 40
+                    draw.text((x, y), line, fill='#333333', font=font_large)
+            
+            # Add subtitle
+            subtitle = "Recipe Placeholder"
+            try:
+                bbox = draw.textbbox((0, 0), subtitle, font=font_small)
+                subtitle_width = bbox[2] - bbox[0]
+                subtitle_x = max(10, (width - subtitle_width) // 2)
+                subtitle_y = start_y + len(lines) * 40 + 20
+            except:
+                # Fallback for older PIL versions
+                subtitle_x = 200
+                subtitle_y = start_y + len(lines) * 40 + 20
+            
+            draw.text((subtitle_x, subtitle_y), subtitle, fill='#666666', font=font_small)
+            
+            # Add decorative border
+            border_color = '#cccccc'
+            draw.rectangle([10, 10, width-10, height-10], outline=border_color, width=3)
+            
+            # Save image with proper error handling
+            image_path = images_dir / filename
+            img.save(image_path, 'JPEG', quality=85)
+            
+            # Verify the file was created and has reasonable size
+            if image_path.exists() and image_path.stat().st_size > 1000:
+                self.logger.info(f"Generated local placeholder image: {filename} ({image_path.stat().st_size} bytes)")
+                return filename
+            else:
+                raise Exception("Generated image file is too small or doesn't exist")
+            
+        except Exception as e:
+            self.logger.error(f"Failed to generate local placeholder image: {e}")
+            
+            # Enhanced fallback: Try simple image generation
+            try:
+                from PIL import Image
+                
+                # Create very simple placeholder
+                img = Image.new('RGB', (600, 400), '#f0f0f0')
+                image_path = images_dir / filename
+                img.save(image_path, 'JPEG', quality=75)
+                
+                if image_path.exists() and image_path.stat().st_size > 500:
+                    self.logger.info(f"Generated simple placeholder image: {filename}")
+                    return filename
+                    
+            except Exception as e2:
+                self.logger.error(f"Even simple image generation failed: {e2}")
+            
+            # Return the jpg filename even if we can't create the image
+            self.logger.warning(f"Failed to generate image for {recipe.title}, returning jpg filename anyway")
+            return filename
+    
+    def _setup_cookbook_files(self, cookbook_dir: Path):
+        """Set up necessary cookbook files (main.tex, class files, etc.)."""
+        try:
+            # Create main.tex if it doesn't exist
+            main_tex_path = cookbook_dir / "main.tex"
+            if not main_tex_path.exists():
+                self._create_main_tex(main_tex_path, cookbook_dir)
+            
+            # Check if we need to copy itakurah files
+            class_file = cookbook_dir / "recipebook.cls"
+            if not class_file.exists():
+                self._copy_itakurah_files(cookbook_dir)
+            
+        except Exception as e:
+            self.logger.warning(f"Failed to setup cookbook files: {e}")
+    
+    def _copy_itakurah_files(self, cookbook_dir: Path):
+        """Copy necessary files from itakurah repository if available."""
+        try:
+            import tempfile
+            import subprocess
+            import shutil
+            
+            # Clone itakurah repo to temporary directory
+            with tempfile.TemporaryDirectory() as temp_dir:
+                temp_path = Path(temp_dir)
+                repo_path = temp_path / "LaTeX-Cookbook"
+                
+                self.logger.info("Downloading itakurah/LaTeX-Cookbook files...")
+                result = subprocess.run([
+                    "git", "clone", 
+                    "https://github.com/itakurah/LaTeX-Cookbook.git",
+                    str(repo_path)
+                ], capture_output=True, text=True)
+                
+                if result.returncode != 0:
+                    self.logger.warning("Failed to clone itakurah repository")
+                    return
+                
+                # Copy essential files
+                files_to_copy = [
+                    "recipebook.cls",
+                    "recipebook.cfg", 
+                    "recipebook-lang.sty",
+                    "titlepage.tex"
+                ]
+                
+                for file_name in files_to_copy:
+                    src = repo_path / file_name
+                    dst = cookbook_dir / file_name
+                    if src.exists():
+                        shutil.copy2(src, dst)
+                        self.logger.debug(f"Copied {file_name}")
+                
+                # Copy fonts directory
+                fonts_src = repo_path / "fonts"
+                fonts_dst = cookbook_dir / "fonts"
+                if fonts_src.exists():
+                    shutil.copytree(fonts_src, fonts_dst, dirs_exist_ok=True)
+                    self.logger.debug("Copied fonts directory")
+                
+                self.logger.info("Successfully copied itakurah LaTeX-Cookbook files")
+                
+        except Exception as e:
+            self.logger.warning(f"Failed to copy itakurah files: {e}")
+            # Create basic fallback files if needed
+            self._create_fallback_class_file(cookbook_dir)
+    
+    def _create_main_tex(self, main_tex_path: Path, cookbook_dir: Path):
+        """Create a main.tex file for the cookbook."""
+        recipes_dir = cookbook_dir / "recipes"
+        
+        # Find all recipe .tex files
+        recipe_files = []
+        if recipes_dir.exists():
+            for tex_file in recipes_dir.glob("*.tex"):
+                recipe_files.append(tex_file.stem)
+        
+        main_content = f"""\\documentclass{{recipebook}}
+
+\\begin{{document}}
+\\input{{titlepage}}
+\\customtableofcontents
+"""
+        
+        # Add input statements for each recipe
+        for recipe_file in sorted(recipe_files):
+            main_content += f"\\input{{recipes/{recipe_file}}}\n"
+        
+        main_content += "\\end{document}\n"
+        
+        with open(main_tex_path, 'w', encoding='utf-8') as f:
+            f.write(main_content)
+        
+        self.logger.info(f"Created main.tex with {len(recipe_files)} recipes")
+    
+    def _create_fallback_class_file(self, cookbook_dir: Path):
+        """Create a basic fallback class file if itakurah files are not available."""
+        class_content = """\\NeedsTeXFormat{LaTeX2e}
+\\ProvidesClass{recipebook}[2025/01/01 v1.0 Basic recipe book class]
+
+\\LoadClass[a4paper]{article}
+
+\\RequirePackage{graphicx}
+\\RequirePackage{geometry}
+\\RequirePackage{enumitem}
+
+% Set page margins
+\\geometry{margin=2cm}
+
+% Define basic commands
+\\newcommand{\\recipeName}{}
+\\newcommand{\\servings}{}
+\\newcommand{\\prepTime}{}
+\\newcommand{\\cookTime}{}
+\\newcommand{\\recipeImage}{}
+
+\\newcommand{\\setRecipeMeta}[5]{%
+    \\renewcommand{\\recipeName}{#1}%
+    \\renewcommand{\\servings}{#2}%
+    \\renewcommand{\\prepTime}{#3}%
+    \\renewcommand{\\cookTime}{#4}%
+    \\renewcommand{\\recipeImage}{#5}%
+}
+
+\\newcommand{\\customtableofcontents}{\\tableofcontents\\clearpage}
+
+% Basic recipe environment
+\\newenvironment{recipe}{%
+    \\clearpage
+    \\section*{\\recipeName}
+    \\textbf{Servings:} \\servings \\quad
+    \\textbf{Prep:} \\prepTime \\quad  
+    \\textbf{Cook:} \\cookTime
+    \\par\\medskip
+}{}
+
+% Basic ingredients environment  
+\\newenvironment{ingredients}{%
+    \\subsection*{Ingredients}
+    \\begin{itemize}[label={}]
+}{%
+    \\end{itemize}
+}
+
+% Basic steps environment
+\\newenvironment{steps}{%
+    \\subsection*{Instructions}
+    \\begin{enumerate}
+}{%
+    \\end{enumerate}
+}
+
+\\newcommand{\\ingredient}[1]{\\item #1}
+\\newcommand{\\step}[1]{\\item #1}
+"""
+        
+        class_file = cookbook_dir / "recipebook.cls"
+        with open(class_file, 'w', encoding='utf-8') as f:
+            f.write(class_content)
+        
+        # Create basic titlepage
+        titlepage_content = """\\begin{titlepage}
+\\begin{center}
+\\vspace*{1cm}
+{\\Huge\\bfseries Recipe Cookbook}
+\\vspace{2cm}
+\\end{center}
+\\end{titlepage}
+"""
+        titlepage_file = cookbook_dir / "titlepage.tex"
+        with open(titlepage_file, 'w', encoding='utf-8') as f:
+            f.write(titlepage_content)
+        
+        self.logger.info("Created fallback class files")
     
     def process(self, recipe: Recipe, format_type: str = "html", output_dir: Optional[Path] = None) -> AgentResult[RenderResult]:
         """Process method required by BaseAgent."""

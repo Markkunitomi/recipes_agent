@@ -45,6 +45,7 @@ class BaseAgent(ABC):
         log_level = getattr(logging, self.settings.log_level.upper(), logging.INFO)
         self.logger.setLevel(log_level)
         
+        # Prevent duplicate logging by not adding handlers if they already exist
         if not self.logger.handlers:
             handler = logging.StreamHandler()
             formatter = logging.Formatter(
@@ -52,6 +53,9 @@ class BaseAgent(ABC):
             )
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
+        
+        # Prevent propagation to avoid duplicate messages
+        self.logger.propagate = False
     
     @abstractmethod
     def process(self, *args, **kwargs) -> AgentResult:

@@ -12,7 +12,7 @@
 {% endif %}
 \begin{ingredients}
 {% for ingredient in escaped_ingredients %}
-    \ingredient{ {{ ingredient }} }
+    \ingredient{{{ ingredient }}}
 {% endfor %}
 \end{ingredients}
 
@@ -24,7 +24,7 @@
 
 {% if recipe.tags %}
 \begin{center}
-\textit{Tags: {{ recipe.tags | join(', ') }}}
+\textit{Tags: {{ recipe.tags|join(', ') }}}
 \end{center}
 {% endif %}
 

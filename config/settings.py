@@ -48,6 +48,9 @@ class ProcessingSettings(BaseModel):
     enable_ingredient_normalization: bool = True
     enable_instruction_enhancement: bool = True
     
+    # USDA API
+    usda_api_timeout: int = 30
+    
     # Unit conversion
     preferred_volume_unit: str = "cup"
     preferred_weight_unit: str = "g"
@@ -77,6 +80,9 @@ class OutputSettings(BaseModel):
     download_images: bool = True
     image_quality: int = 80
     max_image_size: int = 800
+    
+    # PDF validation settings
+    validate_pdf_layout: bool = False  # Enable actual PDF compilation for validation
 
 class Settings(BaseSettings):
     """Main application settings."""

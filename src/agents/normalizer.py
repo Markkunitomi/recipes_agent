@@ -3,9 +3,9 @@ Normalizer Agent - Cleans and normalizes recipe data using LLM assistance
 """
 import re
 from typing import Dict, Any, List, Optional, Tuple
-from models.recipe import Recipe, Ingredient, InstructionStep
-from agents.base import BaseAgent, AgentResult
-from agents.llm_integration import LLMManager
+from ..models.recipe import Recipe, Ingredient, InstructionStep
+from ..agents.base import BaseAgent, AgentResult
+from ..agents.llm_integration import LLMManager
 from config.settings import Settings
 
 class NormalizerAgent(BaseAgent):

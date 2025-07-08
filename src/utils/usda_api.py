@@ -14,13 +14,14 @@ load_dotenv()
 class USDAFoodAPI:
     """Interface to USDA FoodData Central API for ingredient data."""
     
-    def __init__(self, api_key: str = None):
-        """Initialize with API key."""
+    def __init__(self, api_key: str = None, timeout: int = 30):
+        """Initialize with API key and timeout."""
         self.api_key = api_key or os.getenv('USDA')
         self.base_url = "https://api.nal.usda.gov/fdc/v1"
         self.logger = logging.getLogger(__name__)
         self.session = requests.Session()
         self.cache = {}  # Simple in-memory cache
+        self.timeout = timeout  # Configurable timeout, default 30 seconds
         
         if not self.api_key:
             self.logger.warning("No USDA API key found. Set USDA environment variable.")
@@ -52,21 +53,28 @@ class USDAFoodAPI:
             "dataType": ["Survey (FNDDS)", "SR Legacy", "Foundation"]  # Prioritize FNDDS for portion data
         }
         
-        try:
-            response = self.session.get(url, params=params, timeout=10)
-            response.raise_for_status()
-            
-            foods = response.json().get("foods", [])
-            
-            # Cache result
-            self.cache[cache_key] = foods
-            
-            self.logger.debug(f"Found {len(foods)} foods for query: {query}")
-            return foods
-            
-        except requests.exceptions.RequestException as e:
-            self.logger.error(f"Error searching USDA API for '{query}': {e}")
-            return []
+        # Try up to 3 times with exponential backoff
+        for attempt in range(3):
+            try:
+                response = self.session.get(url, params=params, timeout=self.timeout)
+                response.raise_for_status()
+                
+                foods = response.json().get("foods", [])
+                
+                # Cache result
+                self.cache[cache_key] = foods
+                
+                self.logger.debug(f"Found {len(foods)} foods for query: {query}")
+                return foods
+                
+            except requests.exceptions.RequestException as e:
+                if attempt < 2:  # Don't wait after the last attempt
+                    wait_time = 2 ** attempt  # Exponential backoff: 1s, 2s
+                    self.logger.warning(f"USDA API timeout for '{query}', retrying in {wait_time}s (attempt {attempt + 1}/3)")
+                    time.sleep(wait_time)
+                else:
+                    self.logger.error(f"Error searching USDA API for '{query}' after 3 attempts: {e}")
+                    return []
     
     def get_food_details(self, fdc_id: int) -> Optional[Dict[str, Any]]:
         """
@@ -89,20 +97,27 @@ class USDAFoodAPI:
         url = f"{self.base_url}/food/{fdc_id}"
         params = {"api_key": self.api_key}
         
-        try:
-            response = self.session.get(url, params=params, timeout=10)
-            response.raise_for_status()
-            
-            details = response.json()
-            
-            # Cache result
-            self.cache[cache_key] = details
-            
-            return details
-            
-        except requests.exceptions.RequestException as e:
-            self.logger.error(f"Error getting USDA food details for ID {fdc_id}: {e}")
-            return None
+        # Try up to 3 times with exponential backoff
+        for attempt in range(3):
+            try:
+                response = self.session.get(url, params=params, timeout=self.timeout)
+                response.raise_for_status()
+                
+                details = response.json()
+                
+                # Cache result
+                self.cache[cache_key] = details
+                
+                return details
+                
+            except requests.exceptions.RequestException as e:
+                if attempt < 2:  # Don't wait after the last attempt
+                    wait_time = 2 ** attempt  # Exponential backoff: 1s, 2s
+                    self.logger.warning(f"USDA API timeout for ID {fdc_id}, retrying in {wait_time}s (attempt {attempt + 1}/3)")
+                    time.sleep(wait_time)
+                else:
+                    self.logger.error(f"Error getting USDA food details for ID {fdc_id} after 3 attempts: {e}")
+                    return None
     
     def find_density_info(self, ingredient_name: str) -> Optional[Dict[str, Any]]:
         """

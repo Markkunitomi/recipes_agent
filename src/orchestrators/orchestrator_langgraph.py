@@ -10,13 +10,14 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 
 from config.settings import Settings
-from models.recipe import Recipe
-from agents.scraper import ScraperAgent
-from agents.parser import ParserAgent
-from agents.normalizer import NormalizerAgent
-from agents.converter import ConverterAgent
-from agents.renderer import RendererAgent
-from utils.debug_output import create_debug_directory, save_agent_debug, save_debug_summary
+from ..models.recipe import Recipe
+from ..agents.scraper import ScraperAgent
+from ..agents.parser import ParserAgent
+from ..agents.normalizer import NormalizerAgent
+from ..agents.converter import ConverterAgent
+from ..agents.latex_formatter import LaTeXFormatterAgent
+from ..agents.renderer import RendererAgent
+from ..utils.debug_output import create_debug_directory, save_agent_debug, save_debug_summary
 
 # Define the state structure for the graph
 class RecipeProcessingState(TypedDict):
@@ -67,6 +68,7 @@ class LangGraphRecipeOrchestrator:
         self.parser = ParserAgent(settings)
         self.normalizer = NormalizerAgent(settings)
         self.converter = ConverterAgent(settings)
+        self.latex_formatter = LaTeXFormatterAgent(settings)
         self.renderer = RendererAgent(settings)
         
         # Build the workflow graph
@@ -84,6 +86,7 @@ class LangGraphRecipeOrchestrator:
         workflow.add_node("parse", self._parse_recipe)
         workflow.add_node("normalize", self._normalize_recipe)
         workflow.add_node("convert", self._convert_units)
+        workflow.add_node("latex_format", self._latex_format_recipe)
         workflow.add_node("render", self._render_output)
         workflow.add_node("finalize", self._finalize_processing)
         
@@ -122,6 +125,15 @@ class LangGraphRecipeOrchestrator:
         workflow.add_conditional_edges(
             "convert",
             self._should_continue_after_convert,
+            {
+                "continue": "latex_format",
+                "end": "finalize"
+            }
+        )
+        
+        workflow.add_conditional_edges(
+            "latex_format",
+            self._should_continue_after_latex_format,
             {
                 "continue": "render",
                 "end": "finalize"
@@ -340,6 +352,54 @@ class LangGraphRecipeOrchestrator:
         
         return state
     
+    def _latex_format_recipe(self, state: RecipeProcessingState) -> RecipeProcessingState:
+        """Format recipe for LaTeX cookbook layout."""
+        state["current_step"] = "latex_format"
+        step_start = time.time()
+        
+        try:
+            # Only format for LaTeX-related outputs
+            if state["output_format"].lower() == "latex":
+                result = self.latex_formatter.format_recipe(state["recipe_data"])
+                step_time = time.time() - step_start
+                
+                if result.success:
+                    state["recipe_data"] = result.data
+                    state["agent_results"]["latex_formatter"] = {
+                        "success": True,
+                        "data": {
+                            "original_steps": result.metadata.get("original_steps"),
+                            "formatted_steps": result.metadata.get("formatted_steps"),
+                            "estimated_lines": result.metadata.get("estimated_lines")
+                        },
+                        "step_time": step_time
+                    }
+                else:
+                    state["agent_results"]["latex_formatter"] = {
+                        "success": False,
+                        "error": result.error,
+                        "step_time": step_time
+                    }
+            else:
+                # Skip formatting for non-LaTeX outputs
+                state["agent_results"]["latex_formatter"] = {
+                    "success": True,
+                    "data": {"skipped": "Not a LaTeX output format"},
+                    "step_time": 0.001
+                }
+                
+        except Exception as e:
+            step_time = time.time() - step_start
+            state["success"] = False
+            state["error"] = f"LaTeX formatting failed: {str(e)}"
+            state["agent_results"]["latex_formatter"] = {
+                "success": False,
+                "error": str(e),
+                "step_time": step_time
+            }
+        
+        return state
+    
     def _render_output(self, state: RecipeProcessingState) -> RecipeProcessingState:
         """Render final output - always JSON first, then derive other formats."""
         state["current_step"] = "render"
@@ -377,9 +437,17 @@ class LangGraphRecipeOrchestrator:
             final_output_path = json_result.data.output_path
             if state["output_format"].lower() != "json":
                 step_start = time.time()
+                
+                # Map format names to internal renderer formats
+                format_mapping = {
+                    "latex": "cookbook",  # latex output uses cookbook format
+                    "html": "strangetom"  # html output uses strangetom format
+                }
+                renderer_format = format_mapping.get(state["output_format"].lower(), state["output_format"])
+                
                 format_result = self.renderer.render_from_json(
                     json_result.data.output_path,
-                    state["output_format"],
+                    renderer_format,
                     state["output_dir"]
                 )
                 step_time = time.time() - step_start
@@ -461,6 +529,10 @@ class LangGraphRecipeOrchestrator:
         """Determine if workflow should continue after conversion."""
         return "continue" if state["success"] else "end"
     
+    def _should_continue_after_latex_format(self, state: RecipeProcessingState) -> str:
+        """Determine if workflow should continue after LaTeX formatting."""
+        return "continue" if state["success"] else "end"
+    
     def process_recipe(
         self, 
         url: str, 
@@ -513,3 +585,7 @@ class LangGraphRecipeOrchestrator:
     def get_workflow_graph(self):
         """Get the workflow graph for visualization."""
         return self.workflow
+    
+    def get_mermaid_diagram(self) -> str:
+        """Get Mermaid diagram code for the workflow graph."""
+        return self.workflow.get_graph().draw_mermaid()
